@@ -258,6 +258,88 @@ export async function getProgressSnapshot(): Promise<ProgressSnapshot> {
   };
 }
 
+export interface FocusSlice {
+  section: SectionId;
+  label: string;
+  questions: number;
+  correct: number;
+}
+
+export interface TodayDigest {
+  date: string;
+  minutes: number;
+  goalMinutes: number;
+  questions: number;
+  correct: number;
+  accuracy: number;
+  reviewsCompleted: number;
+  sessionsCompleted: number;
+  focus: FocusSlice[]; // sections practiced today, most-practiced first
+  topSkillLabel: string | null;
+  studied: boolean;
+}
+
+/** A visual, at-a-glance summary of what happened today. */
+export async function getTodayDigest(
+  goalMinutes: number,
+  now = new Date(),
+): Promise<TodayDigest> {
+  const date = isoDay(now);
+  const startOfDay = date + 'T00:00:00.000Z';
+
+  const [day, attempts] = await Promise.all([
+    db.dailyActivity.get(date),
+    db.attempts.where('at').aboveOrEqual(startOfDay).toArray(),
+  ]);
+
+  const todaysAttempts = attempts.filter((a) => a.at.slice(0, 10) === date);
+
+  const bySection = new Map<SectionId, FocusSlice>();
+  const skillCount = new Map<string, number>();
+  for (const a of todaysAttempts) {
+    const sec = SKILL_BY_ID[a.skillId]?.section;
+    if (sec) {
+      const slice = bySection.get(sec) ?? {
+        section: sec,
+        label: SECTION_LABELS[sec],
+        questions: 0,
+        correct: 0,
+      };
+      slice.questions += 1;
+      slice.correct += a.correct ? 1 : 0;
+      bySection.set(sec, slice);
+    }
+    skillCount.set(a.skillId, (skillCount.get(a.skillId) ?? 0) + 1);
+  }
+
+  const focus = [...bySection.values()].sort(
+    (a, b) => b.questions - a.questions,
+  );
+  const topSkillId =
+    [...skillCount.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
+  const topSkillLabel = topSkillId
+    ? (SKILL_BY_ID[topSkillId]?.label ?? null)
+    : null;
+
+  const questions = day?.questions ?? todaysAttempts.length;
+  const correct =
+    day?.correct ?? todaysAttempts.filter((a) => a.correct).length;
+
+  return {
+    date,
+    minutes: Math.round(day?.minutes ?? 0),
+    goalMinutes,
+    questions,
+    correct,
+    accuracy: questions ? correct / questions : 0,
+    reviewsCompleted: day?.reviewsCompleted ?? 0,
+    sessionsCompleted: day?.sessionsCompleted ?? 0,
+    focus,
+    topSkillLabel,
+    studied: (day?.questions ?? 0) > 0,
+  };
+}
+
 export async function getDueReviewCount(
   now = new Date().toISOString(),
 ): Promise<number> {

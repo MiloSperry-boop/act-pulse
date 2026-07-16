@@ -1,61 +1,86 @@
+/* Liquid-glass floating navigation — detached, frosted, with a sliding pill. */
 .bottom-nav {
   position: fixed;
-  bottom: 0;
+  bottom: calc(env(safe-area-inset-bottom) + 10px);
   left: 0;
   right: 0;
   z-index: 40;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  padding: 0 var(--sp-4);
+  pointer-events: none;
+}
+
+.bottom-nav__glass {
+  position: relative;
+  display: flex;
   align-items: stretch;
-  height: calc(var(--nav-height) + env(safe-area-inset-bottom));
-  padding-bottom: env(safe-area-inset-bottom);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  backdrop-filter: saturate(160%) blur(14px);
-  -webkit-backdrop-filter: saturate(160%) blur(14px);
-  border-top: 1px solid var(--border);
+  width: 100%;
+  max-width: 420px;
+  height: var(--nav-height);
+  padding: 6px;
+  gap: 8px;
+  border-radius: var(--radius-xl);
+  pointer-events: auto;
+
+  /* The glass material */
+  background: var(--glass-bg);
+  backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  -webkit-backdrop-filter: saturate(180%) blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow:
+    var(--shadow-glass),
+    inset 0 1px 0 var(--glass-border),
+    inset 0 -1px 1px var(--glass-hairline);
+}
+
+/* Sliding highlight behind the active tab. */
+.bottom-nav__pill {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  bottom: 6px;
+  border-radius: calc(var(--radius-xl) - 6px);
+  background: var(--accent-soft);
+  border: 1px solid
+    color-mix(in srgb, var(--accent) 24%, transparent);
+  box-shadow: 0 4px 12px -6px var(--ring);
+  transition: transform 420ms var(--ease-spring);
+  will-change: transform;
 }
 
 .bottom-nav__item {
+  position: relative;
+  z-index: 1;
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 3px;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 600;
+  letter-spacing: 0.01em;
   color: var(--text-faint);
   text-decoration: none;
   -webkit-tap-highlight-color: transparent;
-  transition: color var(--transition);
-  position: relative;
-  min-height: 44px;
+  transition:
+    color 220ms var(--ease),
+    transform 220ms var(--ease-spring);
+  min-width: 44px;
+}
+
+.bottom-nav__item svg {
+  transition: transform 260ms var(--ease-spring);
 }
 
 .bottom-nav__item.is-active {
   color: var(--accent);
 }
-
-.bottom-nav__item.is-active::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  width: 28px;
-  height: 3px;
-  border-radius: var(--radius-full);
-  background: var(--accent);
+.bottom-nav__item.is-active svg {
+  transform: translateY(-1px) scale(1.06);
 }
 
 .bottom-nav__item:active {
-  transform: scale(0.95);
-}
-
-@media (min-width: 720px) {
-  .bottom-nav {
-    max-width: var(--content-max);
-    margin: 0 auto;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    border: 1px solid var(--border);
-    border-bottom: none;
-  }
+  transform: scale(0.92);
 }

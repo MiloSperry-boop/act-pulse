@@ -93,7 +93,7 @@ svg {
   max-width: var(--content-max);
   margin: 0 auto;
   padding: calc(env(safe-area-inset-top) + var(--sp-4)) var(--sp-4)
-    calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--sp-6));
+    calc(var(--nav-height) + env(safe-area-inset-bottom) + var(--sp-8) + 14px);
 }
 
 .screen--flush {
@@ -204,7 +204,11 @@ svg {
   -webkit-tap-highlight-color: transparent;
 }
 .btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
+}
+.btn--pulse:active {
+  transform: scale(0.97);
+  box-shadow: 0 4px 14px -6px var(--ring);
 }
 .btn:disabled {
   opacity: 0.5;
@@ -215,6 +219,26 @@ svg {
   color: var(--on-accent);
   border-color: transparent;
   box-shadow: var(--shadow-sm);
+}
+/* Signature CTA — the one place the pulse gradient appears. */
+.btn--pulse {
+  position: relative;
+  background: var(--pulse-gradient);
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 8px 22px -6px var(--ring);
+  overflow: hidden;
+}
+.btn--pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.22),
+    rgba(255, 255, 255, 0)
+  );
+  pointer-events: none;
 }
 .btn--ghost {
   background: transparent;
@@ -408,6 +432,81 @@ svg {
   padding-top: calc(env(safe-area-inset-top) + var(--sp-6));
 }
 
+/* ── Motion — subtle, professional entrances ───────────────────────── */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Screens gently rise on mount. */
+.screen,
+.runner {
+  animation: rise-in 340ms var(--ease) both;
+}
+
+/* Opt-in staggered reveal for a list of cards/sections. */
+.stagger > * {
+  animation: rise-in 420ms var(--ease) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 30ms; }
+.stagger > *:nth-child(2) { animation-delay: 75ms; }
+.stagger > *:nth-child(3) { animation-delay: 120ms; }
+.stagger > *:nth-child(4) { animation-delay: 165ms; }
+.stagger > *:nth-child(5) { animation-delay: 210ms; }
+.stagger > *:nth-child(6) { animation-delay: 255ms; }
+.stagger > *:nth-child(7) { animation-delay: 300ms; }
+.stagger > *:nth-child(8) { animation-delay: 345ms; }
+.stagger > *:nth-child(n + 9) { animation-delay: 380ms; }
+
+.reveal {
+  animation: rise-in 420ms var(--ease) both;
+}
+.fade-in {
+  animation: fade-in 300ms var(--ease) both;
+}
+
+/* Interactive cards get a whisper of lift on pointer devices. */
+@media (hover: hover) {
+  .card[role='button'],
+  .card[tabindex],
+  button.card {
+    transition:
+      transform var(--transition),
+      box-shadow var(--transition),
+      border-color var(--transition);
+  }
+  .card[role='button']:hover,
+  .card[tabindex]:hover,
+  button.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -417,6 +516,14 @@ svg {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+:root[data-reduce-motion='true'] .screen,
+:root[data-reduce-motion='true'] .runner,
+:root[data-reduce-motion='true'] .stagger > *,
+:root[data-reduce-motion='true'] .reveal,
+:root[data-reduce-motion='true'] .fade-in {
+  animation: none !important;
 }
 
 :root[data-reduce-motion='true'] *,

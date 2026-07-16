@@ -81,7 +81,9 @@ export function App() {
   }, [init]);
 
   return (
-    <HashRouter>
+    <HashRouter
+      future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+    >
       <Gate>
         <Suspense fallback={<Loading />}>
           <Routes>

@@ -215,6 +215,7 @@ export interface AppSettings {
   reduceMotion: boolean;
   soundEffects: boolean;
   showTimer: boolean;
+  studyReminders: boolean;
   installGuideDismissed: boolean;
   updatedAt: string;
 }

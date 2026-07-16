@@ -34,6 +34,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   reduceMotion: false,
   soundEffects: false,
   showTimer: true,
+  studyReminders: false,
   installGuideDismissed: false,
   updatedAt: new Date(0).toISOString(),
 };

@@ -17,6 +17,10 @@ import {
   clearAllProgress,
 } from '../data/exportImport';
 import { buildDailyReminderIcs, downloadText } from '../services/reminders';
+import {
+  notificationsSupported,
+  requestNotificationPermission,
+} from '../services/notifications';
 import { getContentStats, QUESTION_BANK_VERSION } from '../content/questionBank';
 import { ACT_BLUEPRINT } from '../config/actBlueprint';
 
@@ -62,6 +66,28 @@ export function SettingsScreen() {
     const ics = buildDailyReminderIcs(profile.preferredTime ?? '17:00');
     downloadText('act-pulse-reminder.ics', ics, 'text/calendar');
     setMsg('Calendar reminder downloaded — open it to add a daily event.');
+  };
+
+  const toggleStudyReminders = async (on: boolean) => {
+    if (on) {
+      const perm = await requestNotificationPermission();
+      if (perm === 'granted') {
+        await updateSettings({ studyReminders: true });
+        setMsg(
+          'Study reminders on. You’ll get a nudge when you open ACT Pulse after your set time on days you haven’t trained.',
+        );
+      } else if (perm === 'denied') {
+        setMsg(
+          'Notifications are blocked in your browser settings. You can still use the in-app reminder and the calendar (.ics) event below.',
+        );
+        await updateSettings({ studyReminders: true });
+      } else {
+        setMsg('Notification permission wasn’t granted, but the in-app reminder still works.');
+        await updateSettings({ studyReminders: true });
+      }
+    } else {
+      await updateSettings({ studyReminders: false });
+    }
   };
 
   return (
@@ -139,13 +165,24 @@ export function SettingsScreen() {
           checked={profile.includeScience}
           onChange={(v) => updateProfile({ includeScience: v })}
         />
+        <Row
+          label="Study reminders"
+          checked={settings.studyReminders}
+          onChange={(v) => void toggleStudyReminders(v)}
+        />
+        <p className="text-xs faint">
+          When on, ACT Pulse reminds you to train when you open it after your
+          set time on a day you haven’t practiced. A web app can’t reliably send
+          reminders while it’s fully closed
+          {notificationsSupported() ? '' : ' (and this browser blocks web notifications)'}
+          , so for a guaranteed nudge add the calendar event below too.
+        </p>
         <button className="btn btn--outline btn--block" onClick={addReminder}>
           <CalendarPlus size={18} /> Add daily calendar reminder (.ics)
         </button>
         <p className="text-xs faint">
-          A static app can’t send background notifications on its own, so ACT
-          Pulse gives you a real calendar event instead. On iPhone, open the
-          downloaded file to add it to Calendar.
+          On iPhone, open the downloaded file to add a repeating daily event to
+          Calendar.
         </p>
       </section>
 

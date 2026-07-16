@@ -11,15 +11,23 @@ import {
   RefreshCw,
   ChevronRight,
 } from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { useAppStore } from '../state/appStore';
 import { Card, Chip } from '../components/ui';
 import { InstallGuide } from '../components/InstallGuide';
+import { TodayDigest } from '../components/TodayDigest';
 import { db } from '../data/db';
 import {
   getDueReviewCount,
+  getTodayDigest,
   getWeeklyActivity,
+  type TodayDigest as Digest,
 } from '../services/analytics';
 import { recommendedDuration } from '../services/sessionService';
+import {
+  maybeFireDailyReminder,
+  shouldShowReminderBanner,
+} from '../services/notifications';
 import { masteryEstimate } from '../engine/adaptiveEngine';
 import { skillLabel } from '../engine/session';
 import { SKILLS, INITIAL_WEAKNESS_SKILLS } from '../config/skills';
@@ -41,16 +49,30 @@ function daysUntil(dateStr: string | null): number | null {
 export function HomeScreen() {
   const navigate = useNavigate();
   const profile = useAppStore((s) => s.profile);
+  const settings = useAppStore((s) => s.settings);
   const [dueReviews, setDueReviews] = useState(0);
   const [weeklyMinutes, setWeeklyMinutes] = useState(0);
   const [topSkills, setTopSkills] = useState<string[]>([]);
   const [improvement, setImprovement] = useState<string | null>(null);
+  const [digest, setDigest] = useState<Digest | null>(null);
+  const [showReminder, setShowReminder] = useState(false);
 
   useEffect(() => {
     (async () => {
       setDueReviews(await getDueReviewCount());
       const week = await getWeeklyActivity();
       setWeeklyMinutes(Math.round(week.reduce((a, d) => a + d.minutes, 0)));
+
+      const today = await getTodayDigest(profile.dailyMinutes);
+      setDigest(today);
+
+      const reminderCtx = {
+        enabled: settings.studyReminders,
+        preferredTime: profile.preferredTime,
+        studiedToday: today.studied,
+      };
+      setShowReminder(shouldShowReminderBanner(reminderCtx));
+      maybeFireDailyReminder(reminderCtx);
 
       const states = await db.skillStates.toArray();
       const byId = new Map(states.map((s) => [s.skillId, s]));
@@ -83,14 +105,14 @@ export function HomeScreen() {
         .sort((a, b) => b.recentAccuracy - a.recentAccuracy)[0];
       setImprovement(improving ? skillLabel(improving.skillId) : null);
     })();
-  }, []);
+  }, [profile.dailyMinutes, profile.preferredTime, settings.studyReminders]);
 
   const recMode = recommendedDuration(profile.dailyMinutes);
   const countdown = daysUntil(profile.testDate);
   const greeting = getGreeting();
 
   return (
-    <div className="stack" style={{ gap: 'var(--sp-5)' }}>
+    <div className="stack stagger" style={{ gap: 'var(--sp-5)' }}>
       <header className="stack-sm">
         <div className="eyebrow">{greeting}</div>
         <h1 className="title-lg">Let’s train.</h1>
@@ -109,6 +131,28 @@ export function HomeScreen() {
 
       <InstallGuide />
 
+      {showReminder && (
+        <Card tight className="reminder-banner">
+          <div className="row" style={{ gap: 'var(--sp-3)' }}>
+            <span className="reminder-banner__icon">
+              <Bell size={18} />
+            </span>
+            <div style={{ flex: 1 }}>
+              <strong>Time to train</strong>
+              <div className="text-xs faint">
+                You haven’t practiced today. A short session keeps your streak.
+              </div>
+            </div>
+            <button
+              className="btn btn--sm btn--pulse"
+              onClick={() => navigate('/session/daily')}
+            >
+              Start
+            </button>
+          </div>
+        </Card>
+      )}
+
       {/* Primary CTA */}
       <Card accent className="stack">
         <div className="row-between">
@@ -122,7 +166,7 @@ export function HomeScreen() {
           <Timer size={30} color="var(--accent)" />
         </div>
         <button
-          className="btn btn--primary btn--lg btn--block"
+          className="btn btn--pulse btn--lg btn--block"
           onClick={() => navigate('/session/daily')}
         >
           Start today’s session
@@ -134,6 +178,9 @@ export function HomeScreen() {
           Or a focused {profile.dailyMinutes}-minute set
         </button>
       </Card>
+
+      {/* Today digest */}
+      {digest && <TodayDigest digest={digest} />}
 
       {/* Stats row */}
       <div className="grid-2">
