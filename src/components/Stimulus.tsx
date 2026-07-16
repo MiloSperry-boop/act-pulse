@@ -36,7 +36,7 @@ export function DataTable({ stimulus }: { stimulus: QuestionStimulus }) {
   return (
     <figure className="stack-sm" style={{ margin: 0 }}>
       {stimulus.title && <figcaption className="eyebrow">{stimulus.title}</figcaption>}
-      <div style={{ overflowX: 'auto' }}>
+      <div className="scroll-x">
         <table className="data-table">
           <thead>
             <tr>
