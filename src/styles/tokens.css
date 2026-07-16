@@ -1,0 +1,176 @@
+/*
+ * ACT Pulse design tokens.
+ * Calm, focused, mature. Deep navy ground with a single teal accent and a warm
+ * amber for streaks/highlights. System-theme by default; explicit override via
+ * [data-theme] on <html>.
+ */
+
+:root {
+  /* Primitive palette */
+  --navy-950: #0b1220;
+  --navy-900: #111a2e;
+  --navy-850: #16223b;
+  --navy-800: #1b2a47;
+  --navy-700: #26385c;
+
+  --slate-50: #f6f8fb;
+  --slate-100: #eef2f8;
+  --slate-200: #dde5f0;
+  --slate-300: #c2cede;
+  --slate-400: #93a2ba;
+  --slate-500: #64748b;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-900: #16233b;
+
+  --teal-300: #5eead4;
+  --teal-400: #2dd4bf;
+  --teal-500: #14b8a6;
+  --teal-600: #0d9488;
+
+  --amber-300: #fcd34d;
+  --amber-400: #fbbf24;
+  --amber-500: #f59e0b;
+
+  --green-500: #22c55e;
+  --green-600: #16a34a;
+  --red-400: #f87171;
+  --red-500: #ef4444;
+  --red-600: #dc2626;
+  --violet-400: #a78bfa;
+  --violet-500: #8b5cf6;
+
+  /* Type scale */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI',
+    Roboto, Helvetica, Arial, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', 'Fira Code', Menlo,
+    monospace;
+  --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
+  /* Spacing / radius / shadow */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.25rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-10: 2.5rem;
+  --sp-12: 3rem;
+
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 999px;
+
+  --nav-height: 64px;
+  --content-max: 640px;
+
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition: 160ms var(--ease);
+}
+
+/* Light theme (default) */
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: var(--slate-50);
+  --bg-subtle: var(--slate-100);
+  --surface: #ffffff;
+  --surface-2: var(--slate-100);
+  --surface-raised: #ffffff;
+  --border: var(--slate-200);
+  --border-strong: var(--slate-300);
+  --text: var(--slate-900);
+  --text-muted: var(--slate-600);
+  --text-faint: var(--slate-500);
+  --accent: var(--teal-600);
+  --accent-strong: var(--teal-600);
+  --accent-soft: rgba(13, 148, 136, 0.1);
+  --on-accent: #ffffff;
+  --highlight: var(--amber-500);
+  --highlight-soft: rgba(245, 158, 11, 0.14);
+  --success: var(--green-600);
+  --success-soft: rgba(22, 163, 74, 0.12);
+  --danger: var(--red-600);
+  --danger-soft: rgba(220, 38, 38, 0.1);
+  --info: var(--violet-500);
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06),
+    0 1px 3px rgba(15, 23, 42, 0.04);
+  --shadow: 0 4px 16px rgba(15, 23, 42, 0.08),
+    0 1px 3px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 12px 32px rgba(15, 23, 42, 0.12);
+  --ring: rgba(13, 148, 136, 0.4);
+}
+
+/* Dark theme */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: var(--navy-950);
+  --bg-subtle: var(--navy-900);
+  --surface: var(--navy-900);
+  --surface-2: var(--navy-850);
+  --surface-raised: var(--navy-850);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #eef2f8;
+  --text-muted: #a7b4c9;
+  --text-faint: #7e8ca6;
+  --accent: var(--teal-400);
+  --accent-strong: var(--teal-300);
+  --accent-soft: rgba(45, 212, 191, 0.14);
+  --on-accent: #04201c;
+  --highlight: var(--amber-400);
+  --highlight-soft: rgba(251, 191, 36, 0.16);
+  --success: var(--green-500);
+  --success-soft: rgba(34, 197, 94, 0.16);
+  --danger: var(--red-400);
+  --danger-soft: rgba(248, 113, 113, 0.14);
+  --info: var(--violet-400);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+  --ring: rgba(94, 234, 212, 0.5);
+}
+
+/* Follow system when no explicit override is set */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: var(--navy-950);
+    --bg-subtle: var(--navy-900);
+    --surface: var(--navy-900);
+    --surface-2: var(--navy-850);
+    --surface-raised: var(--navy-850);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --text: #eef2f8;
+    --text-muted: #a7b4c9;
+    --text-faint: #7e8ca6;
+    --accent: var(--teal-400);
+    --accent-strong: var(--teal-300);
+    --accent-soft: rgba(45, 212, 191, 0.14);
+    --on-accent: #04201c;
+    --highlight: var(--amber-400);
+    --highlight-soft: rgba(251, 191, 36, 0.16);
+    --success: var(--green-500);
+    --success-soft: rgba(34, 197, 94, 0.16);
+    --danger: var(--red-400);
+    --danger-soft: rgba(248, 113, 113, 0.14);
+    --info: var(--violet-400);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+    --ring: rgba(94, 234, 212, 0.5);
+  }
+}
