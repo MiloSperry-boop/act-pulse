@@ -10,7 +10,7 @@ export const SCIENCE_PASSAGES: Passage[] = [
     kind: 'science_data',
     title: 'Solubility of a Salt vs. Temperature',
     wordCount: 60,
-    attribution: 'Original practice content — ACT Pulse',
+    attribution: 'Original practice content — Summit',
     paragraphs: [
       {
         id: 'p1',
@@ -37,7 +37,7 @@ export const SCIENCE_PASSAGES: Passage[] = [
     kind: 'science_research',
     title: 'Light Color and Plant Growth',
     wordCount: 120,
-    attribution: 'Original practice content — ACT Pulse',
+    attribution: 'Original practice content — Summit',
     paragraphs: [
       {
         id: 'p1',
@@ -63,7 +63,7 @@ export const SCIENCE_PASSAGES: Passage[] = [
     kind: 'science_conflicting',
     title: 'Two Views on Dinosaur Metabolism',
     wordCount: 150,
-    attribution: 'Original practice content — ACT Pulse',
+    attribution: 'Original practice content — Summit',
     paragraphs: [
       {
         id: 'p1',
@@ -85,7 +85,7 @@ export const PHYSICS_PASSAGE: Passage = {
   kind: 'science_research',
   title: 'What Sets a Pendulum’s Swing',
   wordCount: 130,
-  attribution: 'Original practice content — ACT Pulse',
+  attribution: 'Original practice content — Summit',
   paragraphs: [
     {
       id: 'p1',

@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "ACT Pulse — Adaptive daily ACT training. An independent, offline-first PWA.",
+  "description": "Summit — Adaptive daily ACT training. An independent, offline-first PWA.",
   "license": "MIT",
   "scripts": {
     "dev": "vite",

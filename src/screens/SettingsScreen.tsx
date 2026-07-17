@@ -74,7 +74,7 @@ export function SettingsScreen() {
       if (perm === 'granted') {
         await updateSettings({ studyReminders: true });
         setMsg(
-          'Study reminders on. You’ll get a nudge when you open ACT Pulse after your set time on days you haven’t trained.',
+          'Study reminders on. You’ll get a nudge when you open Summit after your set time on days you haven’t trained.',
         );
       } else if (perm === 'denied') {
         setMsg(
@@ -171,7 +171,7 @@ export function SettingsScreen() {
           onChange={(v) => void toggleStudyReminders(v)}
         />
         <p className="text-xs faint">
-          When on, ACT Pulse reminds you to train when you open it after your
+          When on, Summit reminds you to train when you open it after your
           set time on a day you haven’t practiced. A web app can’t reliably send
           reminders while it’s fully closed
           {notificationsSupported() ? '' : ' (and this browser blocks web notifications)'}
@@ -268,7 +268,7 @@ export function SettingsScreen() {
           <li>Open the site in Safari.</li>
           <li>Tap the Share button.</li>
           <li>Select “Add to Home Screen.”</li>
-          <li>Open ACT Pulse from your Home Screen.</li>
+          <li>Open Summit from your Home Screen.</li>
         </ol>
       </Card>
 
@@ -279,11 +279,11 @@ export function SettingsScreen() {
           <strong>About</strong>
         </div>
         <p className="text-sm muted">
-          ACT Pulse is an independent, offline-first study coach. All progress is
+          Summit is an independent, offline-first study coach. All progress is
           stored locally on your device — no account, no server, no tracking.
         </p>
         <p className="text-xs faint">
-          ACT Pulse is an independent ACT-aligned study tool. It is not
+          Summit is an independent ACT-aligned study tool. It is not
           affiliated with, endorsed by, or sponsored by ACT Education Corp. ACT
           is a registered trademark of ACT Education Corp.
         </p>

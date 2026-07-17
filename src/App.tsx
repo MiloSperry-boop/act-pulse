@@ -63,7 +63,7 @@ function Gate({ children }: { children: React.ReactNode }) {
       >
         <div className="stack" style={{ alignItems: 'center' }}>
           <div className="pulse-dot" />
-          <span>Loading ACT Pulse…</span>
+          <span>Loading Summit…</span>
         </div>
       </div>
     );

@@ -1,6 +1,7 @@
 /**
- * Generates ACT Pulse PWA icons as PNGs with zero external dependencies.
- * Draws a navy rounded field with a teal "pulse" (ECG) waveform.
+ * Generates Summit PWA icons as PNGs with zero external dependencies.
+ * Design: violet-ink field, an iris mountain peak with a shaded facet,
+ * and a coral point marking the summit.
  * Run: node scripts/gen-icons.mjs
  */
 import { deflateSync } from 'node:zlib';
@@ -17,6 +18,7 @@ const INK = [12, 13, 20]; // #0c0d14
 const INK2 = [33, 36, 51]; // #212433
 const IRIS = [139, 140, 247]; // #8b8cf7
 const IRIS_DK = [84, 87, 224]; // #5457e0
+const IRIS_SHADE = [65, 67, 196]; // #4143c4
 const CORAL = [255, 122, 90]; // #ff7a5a
 
 function crc32(buf) {
@@ -67,6 +69,9 @@ function encodePNG(size, pixels) {
 function lerp(a, b, t) {
   return a.map((v, i) => Math.round(v + (b[i] - v) * t));
 }
+function clamp01(v) {
+  return Math.max(0, Math.min(1, v));
+}
 
 function draw(size, { maskable = false } = {}) {
   const px = new Array(size * size);
@@ -74,36 +79,39 @@ function draw(size, { maskable = false } = {}) {
   const cx = size / 2;
   const cy = size / 2;
 
-  // Pulse polyline (normalized 0..1), ECG-like, ending in a coral pulse-point.
-  const pts = [
-    [0.1, 0.5],
-    [0.3, 0.5],
-    [0.38, 0.35],
-    [0.48, 0.7],
-    [0.56, 0.26],
-    [0.64, 0.5],
-    [0.8, 0.5],
-  ].map(([x, y]) => [x * size, y * size]);
-  const lineW = size * 0.052;
-  const dot = { x: 0.85 * size, y: 0.5 * size, r: size * 0.045 };
+  // Mountain geometry (normalized). Main peak with a secondary shoulder.
+  const apex = { x: 0.5, y: 0.3 };
+  const shoulder = { x: 0.7, y: 0.52 }; // secondary ridge point on the right
+  const baseY = 0.78;
+  const leftFoot = 0.13;
+  const rightFoot = 0.87;
 
-  function distToSeg(px_, py_, a, b) {
-    const [x1, y1] = a;
-    const [x2, y2] = b;
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    const len2 = dx * dx + dy * dy || 1;
-    let t = ((px_ - x1) * dx + (py_ - y1) * dy) / len2;
-    t = Math.max(0, Math.min(1, t));
-    const lx = x1 + t * dx;
-    const ly = y1 + t * dy;
-    return Math.hypot(px_ - lx, py_ - ly);
+  /** Ridge height (normalized y) at normalized x; baseY outside the mountain. */
+  function ridgeAt(nx) {
+    if (nx <= leftFoot || nx >= rightFoot) return baseY;
+    if (nx <= apex.x) {
+      // left slope: foot → apex
+      const t = (nx - leftFoot) / (apex.x - leftFoot);
+      return baseY + (apex.y - baseY) * t;
+    }
+    if (nx <= shoulder.x) {
+      // right slope: apex → shoulder
+      const t = (nx - apex.x) / (shoulder.x - apex.x);
+      return apex.y + (shoulder.y - apex.y) * t;
+    }
+    // shoulder → right foot
+    const t = (nx - shoulder.x) / (rightFoot - shoulder.x);
+    return shoulder.y + (baseY - shoulder.y) * t;
   }
+
+  const aa = 1.25 / size; // ~1.25px anti-alias band in normalized units
+  const dotR = 0.052;
+  const dot = { x: apex.x, y: apex.y - 0.085 };
 
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const i = y * size + x;
-      // Rounded rect mask
+      // Rounded-rect mask
       let inside = true;
       if (!maskable) {
         const qx = Math.abs(x - cx) - (size / 2 - r);
@@ -117,31 +125,40 @@ function draw(size, { maskable = false } = {}) {
         px[i] = [0, 0, 0, 0];
         continue;
       }
+
+      const nx = x / size;
+      const ny = y / size;
+
       // Background diagonal gradient (violet-ink).
-      const t = (x / size + y / size) / 2;
-      let color = lerp(INK2, INK, t);
+      let color = lerp(INK2, INK, (nx + ny) / 2);
 
-      // Pulse line in the iris gradient.
-      let dmin = Infinity;
-      for (let s = 0; s < pts.length - 1; s++) {
-        dmin = Math.min(dmin, distToSeg(x, y, pts[s], pts[s + 1]));
-      }
-      if (dmin < lineW) {
-        const edge = Math.max(0, Math.min(1, (lineW - dmin) / (lineW * 0.5)));
-        const lc = lerp(IRIS_DK, IRIS, x / size);
-        color = lerp(color, lc, edge);
+      // Mountain fill: between the ridge line and the base line.
+      const ridge = ridgeAt(nx);
+      if (ny > ridge - aa && ny < baseY + aa) {
+        // Anti-aliased coverage at the ridge and base edges.
+        const topCov = clamp01((ny - (ridge - aa)) / (2 * aa));
+        const botCov = clamp01(((baseY + aa) - ny) / (2 * aa));
+        const cov = Math.min(topCov, botCov);
+        if (cov > 0) {
+          // Vertical gradient up the face; right of the apex is the shaded facet.
+          const h = clamp01((baseY - ny) / (baseY - apex.y));
+          let face = lerp(IRIS_DK, IRIS, h);
+          if (nx > apex.x) face = lerp(face, IRIS_SHADE, 0.45);
+          color = lerp(color, face, cov);
+        }
       }
 
-      // Coral pulse-point at the line's end (soft glow + solid core).
-      const dDot = Math.hypot(x - dot.x, y - dot.y);
-      if (dDot < dot.r * 2.4) {
-        const glow = Math.max(0, 1 - dDot / (dot.r * 2.4)) * 0.35;
+      // Coral summit point (soft glow + solid core) above the apex.
+      const dDot = Math.hypot(nx - dot.x, ny - dot.y);
+      if (dDot < dotR * 2.4) {
+        const glow = Math.max(0, 1 - dDot / (dotR * 2.4)) * 0.32;
         color = lerp(color, CORAL, glow);
       }
-      if (dDot < dot.r) {
-        const core = Math.max(0, Math.min(1, (dot.r - dDot) / (dot.r * 0.35)));
+      if (dDot < dotR) {
+        const core = clamp01((dotR - dDot) / (dotR * 0.35));
         color = lerp(color, CORAL, core);
       }
+
       px[i] = [...color, 255];
     }
   }

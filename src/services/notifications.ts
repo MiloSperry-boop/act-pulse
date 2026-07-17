@@ -78,7 +78,7 @@ export function maybeFireDailyReminder(
   if (localStorage.getItem(LAST_REMINDED_KEY) === today) return false;
 
   try {
-    new Notification('Time for ACT Pulse', {
+    new Notification('Time for Summit', {
       body: 'A few focused minutes keeps your streak and your plan on track.',
       icon: './icons/icon-192.png',
       badge: './icons/icon-192.png',
