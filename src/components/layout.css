@@ -29,15 +29,21 @@
   margin-top: var(--sp-3);
 }
 
-/* Session runner uses a full-height, chromeless layout. */
+/* Session runner uses a full-height, chromeless layout. With the page scroll
+ * locked, the runner is its own scroll container. */
 .runner {
   display: flex;
   flex-direction: column;
-  min-height: 100dvh;
+  height: 100%;
+  height: 100dvh;
   max-width: var(--content-max);
   margin: 0 auto;
   padding: calc(env(safe-area-inset-top) + var(--sp-3)) var(--sp-4)
     calc(env(safe-area-inset-bottom) + var(--sp-4));
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 .runner__top {
   position: sticky;

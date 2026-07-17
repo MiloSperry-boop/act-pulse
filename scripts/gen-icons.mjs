@@ -12,11 +12,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT = join(__dirname, '..', 'public', 'icons');
 mkdirSync(OUT, { recursive: true });
 
-// Colors
-const NAVY = [11, 18, 32];
-const NAVY2 = [22, 34, 59];
-const TEAL = [45, 212, 191];
-const TEAL_DK = [13, 148, 136];
+// Colors — matches the app's iris/coral identity.
+const INK = [12, 13, 20]; // #0c0d14
+const INK2 = [33, 36, 51]; // #212433
+const IRIS = [139, 140, 247]; // #8b8cf7
+const IRIS_DK = [84, 87, 224]; // #5457e0
+const CORAL = [255, 122, 90]; // #ff7a5a
 
 function crc32(buf) {
   let c = ~0;
@@ -73,17 +74,18 @@ function draw(size, { maskable = false } = {}) {
   const cx = size / 2;
   const cy = size / 2;
 
-  // Pulse polyline (normalized 0..1), ECG-like.
+  // Pulse polyline (normalized 0..1), ECG-like, ending in a coral pulse-point.
   const pts = [
     [0.1, 0.5],
-    [0.32, 0.5],
-    [0.4, 0.34],
-    [0.5, 0.72],
-    [0.58, 0.28],
-    [0.66, 0.5],
-    [0.9, 0.5],
+    [0.3, 0.5],
+    [0.38, 0.35],
+    [0.48, 0.7],
+    [0.56, 0.26],
+    [0.64, 0.5],
+    [0.8, 0.5],
   ].map(([x, y]) => [x * size, y * size]);
-  const lineW = size * 0.055;
+  const lineW = size * 0.052;
+  const dot = { x: 0.85 * size, y: 0.5 * size, r: size * 0.045 };
 
   function distToSeg(px_, py_, a, b) {
     const [x1, y1] = a;
@@ -115,19 +117,30 @@ function draw(size, { maskable = false } = {}) {
         px[i] = [0, 0, 0, 0];
         continue;
       }
-      // Background vertical gradient
-      const t = y / size;
-      let color = lerp(NAVY2, NAVY, t);
+      // Background diagonal gradient (violet-ink).
+      const t = (x / size + y / size) / 2;
+      let color = lerp(INK2, INK, t);
 
-      // Pulse line
+      // Pulse line in the iris gradient.
       let dmin = Infinity;
       for (let s = 0; s < pts.length - 1; s++) {
         dmin = Math.min(dmin, distToSeg(x, y, pts[s], pts[s + 1]));
       }
       if (dmin < lineW) {
         const edge = Math.max(0, Math.min(1, (lineW - dmin) / (lineW * 0.5)));
-        const lc = lerp(TEAL_DK, TEAL, (x / size));
+        const lc = lerp(IRIS_DK, IRIS, x / size);
         color = lerp(color, lc, edge);
+      }
+
+      // Coral pulse-point at the line's end (soft glow + solid core).
+      const dDot = Math.hypot(x - dot.x, y - dot.y);
+      if (dDot < dot.r * 2.4) {
+        const glow = Math.max(0, 1 - dDot / (dot.r * 2.4)) * 0.35;
+        color = lerp(color, CORAL, glow);
+      }
+      if (dDot < dot.r) {
+        const core = Math.max(0, Math.min(1, (dot.r - dDot) / (dot.r * 0.35)));
+        color = lerp(color, CORAL, core);
       }
       px[i] = [...color, 255];
     }
