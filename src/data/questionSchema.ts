@@ -178,7 +178,7 @@ export const PassageSchema = z.object({
   paragraphs: z.array(PassageParagraphSchema).min(1),
   wordCount: z.number().int().positive(),
   stimulus: QuestionStimulusSchema.optional(),
-  attribution: z.string().default('Original practice content — Summit'),
+  attribution: z.string().default('Original practice content'),
 });
 export type Passage = z.infer<typeof PassageSchema>;
 

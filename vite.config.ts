@@ -42,8 +42,8 @@ export default defineConfig({
       includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'icons/*.png'],
       manifest: {
         id: '/act-pulse/',
-        name: 'Summit — Adaptive daily ACT training',
-        short_name: 'Summit',
+        name: 'ACT — Adaptive daily ACT training',
+        short_name: 'ACT',
         description:
           'An independent, adaptive, offline-first ACT training coach. Not affiliated with ACT Education Corp.',
         start_url: '.',

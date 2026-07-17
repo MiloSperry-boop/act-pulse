@@ -21,9 +21,9 @@ export function InstallGuide() {
   if (!shouldShowIosGuide()) return null;
 
   return (
-    <div className="card install-guide" role="dialog" aria-label="Install Summit">
+    <div className="card install-guide" role="dialog" aria-label="Install ACT">
       <div className="row-between">
-        <strong>Add Summit to your Home Screen</strong>
+        <strong>Add ACT to your Home Screen</strong>
         <button
           className="btn btn--sm btn--ghost"
           aria-label="Dismiss install guide"
@@ -40,7 +40,7 @@ export function InstallGuide() {
           <Plus size={18} aria-hidden /> Choose <strong>Add to Home Screen</strong>.
         </li>
         <li className="row">
-          Open Summit from your Home Screen — it runs full-screen and offline.
+          Open ACT from your Home Screen — it runs full-screen and offline.
         </li>
       </ol>
     </div>

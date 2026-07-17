@@ -69,7 +69,7 @@ export function parseExport(raw: unknown): ExportEnvelope {
   const parsed = ExportEnvelopeSchema.parse(raw);
   if (parsed.schemaVersion > EXPORT_SCHEMA_VERSION) {
     throw new Error(
-      `This file was exported from a newer version of Summit (schema ${parsed.schemaVersion}).`,
+      `This file was exported from a newer version of ACT (schema ${parsed.schemaVersion}).`,
     );
   }
   return parsed;

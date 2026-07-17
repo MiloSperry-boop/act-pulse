@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Summit — Adaptive daily ACT training. An independent, offline-first PWA.",
+  "description": "ACT — Adaptive daily ACT training. An independent, offline-first PWA.",
   "license": "MIT",
   "scripts": {
     "dev": "vite",

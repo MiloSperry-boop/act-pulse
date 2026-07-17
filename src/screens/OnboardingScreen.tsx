@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Mountain, ChevronRight } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { useAppStore } from '../state/appStore';
 import { db } from '../data/db';
 import { createSkillState } from '../engine/adaptiveEngine';
@@ -71,8 +71,9 @@ export function OnboardingScreen() {
     <div className="runner stack" style={{ gap: 'var(--sp-5)' }}>
       <header className="stack-sm" style={{ marginTop: 'var(--sp-4)' }}>
         <div className="row" style={{ gap: 'var(--sp-2)' }}>
-          <Mountain color="var(--accent)" />
-          <strong>Summit</strong>
+          <strong style={{ fontSize: 'var(--text-xl)', letterSpacing: '0.04em' }}>
+            ACT
+          </strong>
         </div>
         <p className="faint text-sm">Adaptive daily ACT training</p>
       </header>

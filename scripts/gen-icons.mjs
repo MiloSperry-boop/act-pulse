@@ -1,7 +1,7 @@
 /**
- * Generates Summit PWA icons as PNGs with zero external dependencies.
- * Design: violet-ink field, an iris mountain peak with a shaded facet,
- * and a coral point marking the summit.
+ * Generates the app's PWA icons as PNGs with zero external dependencies.
+ * Design: bold dark-blue "ACT" letters on a white field.
+ * Letters are drawn geometrically (stroked segments + an arc), no font needed.
  * Run: node scripts/gen-icons.mjs
  */
 import { deflateSync } from 'node:zlib';
@@ -13,13 +13,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT = join(__dirname, '..', 'public', 'icons');
 mkdirSync(OUT, { recursive: true });
 
-// Colors — matches the app's iris/coral identity.
-const INK = [12, 13, 20]; // #0c0d14
-const INK2 = [33, 36, 51]; // #212433
-const IRIS = [139, 140, 247]; // #8b8cf7
-const IRIS_DK = [84, 87, 224]; // #5457e0
-const IRIS_SHADE = [65, 67, 196]; // #4143c4
-const CORAL = [255, 122, 90]; // #ff7a5a
+const WHITE = [255, 255, 255];
+const BLUE = [30, 58, 138]; // #1e3a8a — classic dark blue
 
 function crc32(buf) {
   let c = ~0;
@@ -43,11 +38,11 @@ function encodePNG(size, pixels) {
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(size, 0);
   ihdr.writeUInt32BE(size, 4);
-  ihdr[8] = 8; // bit depth
+  ihdr[8] = 8;
   ihdr[9] = 6; // RGBA
   const raw = Buffer.alloc(size * (size * 4 + 1));
   for (let y = 0; y < size; y++) {
-    raw[y * (size * 4 + 1)] = 0; // filter none
+    raw[y * (size * 4 + 1)] = 0;
     for (let x = 0; x < size; x++) {
       const p = pixels[y * size + x];
       const o = y * (size * 4 + 1) + 1 + x * 4;
@@ -73,44 +68,63 @@ function clamp01(v) {
   return Math.max(0, Math.min(1, v));
 }
 
+function distToSeg(px_, py_, a, b) {
+  const [x1, y1] = a;
+  const [x2, y2] = b;
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len2 = dx * dx + dy * dy || 1;
+  let t = ((px_ - x1) * dx + (py_ - y1) * dy) / len2;
+  t = clamp01(t);
+  return Math.hypot(px_ - (x1 + t * dx), py_ - (y1 + t * dy));
+}
+
 function draw(size, { maskable = false } = {}) {
   const px = new Array(size * size);
-  const r = maskable ? size : size * 0.22; // corner radius
+  const r = maskable ? size : size * 0.22;
   const cx = size / 2;
   const cy = size / 2;
 
-  // Mountain geometry (normalized). Main peak with a secondary shoulder.
-  const apex = { x: 0.5, y: 0.3 };
-  const shoulder = { x: 0.7, y: 0.52 }; // secondary ridge point on the right
-  const baseY = 0.78;
-  const leftFoot = 0.13;
-  const rightFoot = 0.87;
+  // ── Letterforms (normalized 0..1 coordinates) ─────────────────────────
+  const top = 0.36;
+  const bottom = 0.64;
+  const midY = (top + bottom) / 2;
+  const w = 0.062; // stroke half-ish width (full width used as threshold)
 
-  /** Ridge height (normalized y) at normalized x; baseY outside the mountain. */
-  function ridgeAt(nx) {
-    if (nx <= leftFoot || nx >= rightFoot) return baseY;
-    if (nx <= apex.x) {
-      // left slope: foot → apex
-      const t = (nx - leftFoot) / (apex.x - leftFoot);
-      return baseY + (apex.y - baseY) * t;
-    }
-    if (nx <= shoulder.x) {
-      // right slope: apex → shoulder
-      const t = (nx - apex.x) / (shoulder.x - apex.x);
-      return apex.y + (shoulder.y - apex.y) * t;
-    }
-    // shoulder → right foot
-    const t = (nx - shoulder.x) / (rightFoot - shoulder.x);
-    return shoulder.y + (baseY - shoulder.y) * t;
-  }
+  // A — centered at 0.235
+  const A = { apex: [0.235, top], bl: [0.15, bottom], br: [0.32, bottom] };
+  const aCross = [
+    [0.235 + (0.15 - 0.235) * 0.55, top + (bottom - top) * 0.62],
+    [0.235 + (0.32 - 0.235) * 0.55, top + (bottom - top) * 0.62],
+  ];
+  const A_SEGS = [
+    [A.apex, A.bl],
+    [A.apex, A.br],
+    aCross,
+  ];
 
-  const aa = 1.25 / size; // ~1.25px anti-alias band in normalized units
-  const dotR = 0.052;
-  const dot = { x: apex.x, y: apex.y - 0.085 };
+  // C — ring centered at 0.5 with a right-facing gap
+  const C = { cx: 0.5, cy: midY, R: (bottom - top) / 2, gapDeg: 55 };
+
+  // T — centered at 0.765
+  const T_SEGS = [
+    [
+      [0.675, top],
+      [0.855, top],
+    ],
+    [
+      [0.765, top],
+      [0.765, bottom],
+    ],
+  ];
+
+  const SEGS = [...A_SEGS, ...T_SEGS];
+  const aa = 1.3 / size; // anti-alias band
 
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       const i = y * size + x;
+
       // Rounded-rect mask
       let inside = true;
       if (!maskable) {
@@ -128,35 +142,23 @@ function draw(size, { maskable = false } = {}) {
 
       const nx = x / size;
       const ny = y / size;
+      let color = WHITE;
 
-      // Background diagonal gradient (violet-ink).
-      let color = lerp(INK2, INK, (nx + ny) / 2);
+      // Distance to the nearest letter stroke.
+      let dmin = Infinity;
+      for (const [a, b] of SEGS) dmin = Math.min(dmin, distToSeg(nx, ny, a, b));
 
-      // Mountain fill: between the ridge line and the base line.
-      const ridge = ridgeAt(nx);
-      if (ny > ridge - aa && ny < baseY + aa) {
-        // Anti-aliased coverage at the ridge and base edges.
-        const topCov = clamp01((ny - (ridge - aa)) / (2 * aa));
-        const botCov = clamp01(((baseY + aa) - ny) / (2 * aa));
-        const cov = Math.min(topCov, botCov);
-        if (cov > 0) {
-          // Vertical gradient up the face; right of the apex is the shaded facet.
-          const h = clamp01((baseY - ny) / (baseY - apex.y));
-          let face = lerp(IRIS_DK, IRIS, h);
-          if (nx > apex.x) face = lerp(face, IRIS_SHADE, 0.45);
-          color = lerp(color, face, cov);
-        }
+      // C as an arc: |distance from ring| with the right gap excluded.
+      const dc = Math.hypot(nx - C.cx, ny - C.cy);
+      const angle = (Math.atan2(ny - C.cy, nx - C.cx) * 180) / Math.PI; // -180..180
+      if (Math.abs(angle) > C.gapDeg) {
+        dmin = Math.min(dmin, Math.abs(dc - C.R));
       }
 
-      // Coral summit point (soft glow + solid core) above the apex.
-      const dDot = Math.hypot(nx - dot.x, ny - dot.y);
-      if (dDot < dotR * 2.4) {
-        const glow = Math.max(0, 1 - dDot / (dotR * 2.4)) * 0.32;
-        color = lerp(color, CORAL, glow);
-      }
-      if (dDot < dotR) {
-        const core = clamp01((dotR - dDot) / (dotR * 0.35));
-        color = lerp(color, CORAL, core);
+      const half = w / 2;
+      if (dmin < half + aa) {
+        const cov = clamp01((half + aa - dmin) / (2 * aa));
+        color = lerp(WHITE, BLUE, cov);
       }
 
       px[i] = [...color, 255];

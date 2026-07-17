@@ -14,7 +14,7 @@ export const READING_PASSAGES: Passage[] = [
     kind: 'literary_narrative',
     title: 'The Keeper’s Daughter',
     wordCount: 250,
-    attribution: 'Original practice content — Summit',
+    attribution: 'Original practice content',
     paragraphs: [
       {
         id: 'p1',
@@ -44,7 +44,7 @@ export const READING_PASSAGES: Passage[] = [
     kind: 'natural_science',
     title: 'What the Bees Remember',
     wordCount: 245,
-    attribution: 'Original practice content — Summit',
+    attribution: 'Original practice content',
     paragraphs: [
       {
         id: 'p1',
@@ -74,7 +74,7 @@ export const READING_PASSAGES: Passage[] = [
     kind: 'social_science',
     title: 'The Fifteen-Minute City',
     wordCount: 240,
-    attribution: 'Original practice content — Summit',
+    attribution: 'Original practice content',
     paragraphs: [
       {
         id: 'p1',
@@ -106,7 +106,7 @@ export const HUMANITIES_PASSAGE: Passage = {
   kind: 'humanities',
   title: 'The Quiet Revolution of the Jazz Trio',
   wordCount: 235,
-  attribution: 'Original practice content — Summit',
+  attribution: 'Original practice content',
   paragraphs: [
     {
       id: 'p1',

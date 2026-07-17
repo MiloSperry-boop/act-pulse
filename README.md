@@ -1,8 +1,8 @@
-# Summit
+# ACT
 
 **Adaptive daily ACT training** — an independent, offline-first Progressive Web App that behaves like a personal ACT coach. It finds the skills you struggle with, adapts every future session to them, and reviews your mistakes with spaced repetition. No account, no backend, no subscription — all progress is stored locally on your device.
 
-> **Disclaimer:** Summit is an independent ACT-aligned study tool. It is not affiliated with, endorsed by, or sponsored by ACT Education Corp. ACT is a registered trademark of ACT Education Corp. All practice content is original and is **not** official ACT material.
+> **Disclaimer:** This app is an independent ACT-aligned study tool. It is not affiliated with, endorsed by, or sponsored by ACT Education Corp. ACT is a registered trademark of ACT Education Corp. All practice content is original and is **not** official ACT material.
 
 ---
 
@@ -92,7 +92,7 @@ All content is described as *ACT-aligned, original practice content — not offi
 1. Open the deployed site in **Safari**.
 2. Tap the **Share** button.
 3. Choose **Add to Home Screen**.
-4. Open **Summit** from your Home Screen — it runs full-screen and works offline.
+4. Open **ACT** from your Home Screen — it runs full-screen and works offline.
 
 ---
 
@@ -117,7 +117,7 @@ The app is configured for a GitHub **project site** at `https://USERNAME.github.
 ```bash
 git init
 git add -A
-git commit -m "Initial commit: Summit"
+git commit -m "Initial commit: ACT"
 git branch -M main
 
 # With the GitHub CLI authenticated (gh auth status):
@@ -134,7 +134,7 @@ Then enable **Settings → Pages → Source: GitHub Actions** once.
 
 ## Privacy
 
-Summit stores everything (profile, settings, attempts, skill states, reviews, mistakes, sessions) locally in your browser's IndexedDB. Nothing is sent to any server. Export your data any time from **Settings → Your data → Export**, and import it on another device.
+ACT stores everything (profile, settings, attempts, skill states, reviews, mistakes, sessions) locally in your browser's IndexedDB. Nothing is sent to any server. Export your data any time from **Settings → Your data → Export**, and import it on another device.
 
 ---
 
@@ -146,4 +146,4 @@ The service worker and data model are structured so optional Web Push could be a
 
 ## License
 
-[MIT](LICENSE). ACT is a registered trademark of ACT Education Corp; Summit is independent and unaffiliated.
+[MIT](LICENSE). ACT is a registered trademark of ACT Education Corp; ACT is independent and unaffiliated.

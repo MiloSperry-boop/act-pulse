@@ -11,7 +11,7 @@ function pad(n: number): string {
 /** Build an iCalendar string for a daily recurring reminder at HH:mm. */
 export function buildDailyReminderIcs(
   time: string,
-  title = 'Summit — daily practice',
+  title = 'ACT — daily practice',
 ): string {
   const [hh, mm] = time.split(':').map((x) => parseInt(x, 10));
   const now = new Date();
@@ -36,7 +36,7 @@ export function buildDailyReminderIcs(
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Summit//EN',
+    'PRODID:-//ACT//EN',
     'CALSCALE:GREGORIAN',
     'BEGIN:VEVENT',
     `UID:${uid}`,
@@ -45,11 +45,11 @@ export function buildDailyReminderIcs(
     `DTEND:${fmt(end)}`,
     'RRULE:FREQ=DAILY',
     `SUMMARY:${title}`,
-    'DESCRIPTION:Time for a short Summit session. Open the app and tap Start today\\’s session.',
+    'DESCRIPTION:Time for a short ACT session. Open the app and tap Start today\\’s session.',
     'BEGIN:VALARM',
     'TRIGGER:-PT0M',
     'ACTION:DISPLAY',
-    'DESCRIPTION:Summit practice',
+    'DESCRIPTION:ACT practice',
     'END:VALARM',
     'END:VEVENT',
     'END:VCALENDAR',
