@@ -37,7 +37,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
+      registerType: 'autoUpdate',
       injectRegister: null,
       includeAssets: ['favicon.svg', 'apple-touch-icon.png', 'icons/*.png'],
       manifest: {
@@ -81,6 +81,7 @@ export default defineConfig({
         navigateFallback: 'index.html',
         cleanupOutdatedCaches: true,
         clientsClaim: true,
+        skipWaiting: true,
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.destination === 'font',

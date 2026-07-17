@@ -191,12 +191,106 @@ function probability(rng: RNG, seed: string): ACTQuestion {
   });
 }
 
+function exponentRules(rng: RNG, seed: string): ACTQuestion {
+  // Simplify x^a · x^b or (x^a)^b — answer computed from the rule.
+  const a = randInt(rng, 2, 6);
+  const b = randInt(rng, 2, 5);
+  const isProduct = rng() < 0.5;
+  const result = isProduct ? a + b : a * b;
+  const exprStr = isProduct ? `x${sup(a)} · x${sup(b)}` : `(x${sup(a)})${sup(b)}`;
+  const correct = `x${sup(result)}`;
+  const wrongRule = isProduct ? a * b : a + b;
+  const distractors = [`x${sup(wrongRule)}`, `x${sup(result + 1)}`, `${result}x`];
+  return makeQuestion(rng, {
+    id: idFor('exponent', seed),
+    section: 'math',
+    officialCategory: 'Preparing for Higher Math',
+    subskill: 'Number & Quantity',
+    microSkill: 'math.nq.exponents',
+    difficulty: 2 as Difficulty,
+    expectedSeconds: 35,
+    calculatorAllowed: true,
+    prompt: `For all x ≠ 0, which expression is equivalent to ${exprStr}?`,
+    correctText: correct,
+    distractorTexts: distractors,
+    distractorExplainer: (t) =>
+      t === `x${sup(wrongRule)}`
+        ? isProduct
+          ? 'Multiplying like bases ADDS the exponents; this multiplied them.'
+          : 'A power of a power MULTIPLIES the exponents; this added them.'
+        : 'Apply the exponent rule to the exponents themselves; the base stays x.',
+    explanation: isProduct
+      ? `When multiplying like bases, add the exponents: x${sup(a)} · x${sup(b)} = x${sup(a + b)}.`
+      : `A power raised to a power multiplies the exponents: (x${sup(a)})${sup(b)} = x${sup(a * b)}.`,
+    conceptSummary:
+      'xᵃ · xᵇ = xᵃ⁺ᵇ (add when multiplying); (xᵃ)ᵇ = xᵃᵇ (multiply for a power of a power).',
+    tags: ['generated', 'exponents'],
+  });
+}
+
+function sup(n: number): string {
+  const map: Record<string, string> = {
+    '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴',
+    '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹',
+  };
+  return String(n).split('').map((d) => map[d] ?? d).join('');
+}
+
+function medianValue(rng: RNG, seed: string): ACTQuestion {
+  // Odd-length list so the median is a single value; presented unsorted.
+  const n = pick(rng, [5, 7]);
+  const vals: number[] = [];
+  while (vals.length < n) {
+    const v = randInt(rng, 3, 40);
+    if (!vals.includes(v)) vals.push(v);
+  }
+  const sorted = [...vals].sort((a, b) => a - b);
+  const median = sorted[(n - 1) / 2];
+  const mean = Math.round((vals.reduce((a, b) => a + b, 0) / n) * 10) / 10;
+  const candidates = [
+    `${vals[Math.floor(n / 2)]}`, // middle of the UNSORTED list
+    `${mean}`,
+    `${sorted[(n - 1) / 2 + 1]}`,
+    `${sorted[(n - 1) / 2 - 1]}`,
+    `${median + 2}`,
+    `${median - 1}`,
+  ];
+  const distractors: string[] = [];
+  for (const c of candidates) {
+    if (c !== `${median}` && !distractors.includes(c)) distractors.push(c);
+    if (distractors.length === 3) break;
+  }
+  return makeQuestion(rng, {
+    id: idFor('median', seed),
+    section: 'math',
+    officialCategory: 'Preparing for Higher Math',
+    subskill: 'Statistics & Probability',
+    microSkill: 'math.stat.center',
+    difficulty: 2 as Difficulty,
+    expectedSeconds: 45,
+    calculatorAllowed: true,
+    prompt: `What is the median of the data set ${vals.join(', ')}?`,
+    correctText: `${median}`,
+    distractorTexts: distractors,
+    distractorExplainer: (t) =>
+      t === `${mean}`
+        ? 'That is the mean (average). The median is the middle value after sorting.'
+        : 'Sort the values first — the median is the middle entry of the SORTED list.',
+    explanation: `Sorted: ${sorted.join(', ')}. With ${n} values, the median is the ${(n + 1) / 2}th value: ${median}.`,
+    conceptSummary: 'The median is the middle value once the data are sorted.',
+    strategyTip: 'Always sort before finding the median — ACT lists are often given out of order.',
+    tags: ['generated', 'statistics', 'median'],
+  });
+}
+
 const GENERATORS = [
   linearEquation,
   functionEval,
   percentChange,
   meanValue,
   probability,
+  exponentRules,
+  medianValue,
 ];
 
 export function generateMathCoreQuestion(seedStr: string): ACTQuestion {

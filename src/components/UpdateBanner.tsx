@@ -1,37 +1,37 @@
+import { useEffect } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
-/** Shows a banner when a new service worker version is ready. */
-export function UpdateBanner() {
+const CHECK_INTERVAL_MS = 60 * 60 * 1000; // hourly
+
+/**
+ * Silent auto-updater. With registerType 'autoUpdate' + skipWaiting, a new
+ * service worker takes over as soon as it's found; we also proactively check
+ * for updates on an interval and whenever the app returns to the foreground
+ * (the common iPhone pattern: reopen from the Home Screen).
+ */
+export function AutoUpdater() {
   const {
-    needRefresh: [needRefresh, setNeedRefresh],
+    needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
-    onRegisteredSW(swUrl) {
-      if (import.meta.env.PROD) {
-        console.debug('SW registered:', swUrl);
-      }
+    immediate: true,
+    onRegisteredSW(_swUrl, registration) {
+      if (!registration) return;
+      // Hourly background check while the app stays open.
+      setInterval(() => void registration.update(), CHECK_INTERVAL_MS);
+      // Check when the app comes back to the foreground.
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          void registration.update();
+        }
+      });
     },
   });
 
-  if (!needRefresh) return null;
+  // If a new version is waiting, apply it and reload right away.
+  useEffect(() => {
+    if (needRefresh) void updateServiceWorker(true);
+  }, [needRefresh, updateServiceWorker]);
 
-  return (
-    <div className="update-banner" role="alert">
-      <span>An updated version of ACT Pulse is available.</span>
-      <div className="row" style={{ gap: 'var(--sp-2)' }}>
-        <button
-          className="btn btn--sm btn--ghost"
-          onClick={() => setNeedRefresh(false)}
-        >
-          Later
-        </button>
-        <button
-          className="btn btn--sm btn--primary"
-          onClick={() => updateServiceWorker(true)}
-        >
-          Update now
-        </button>
-      </div>
-    </div>
-  );
+  return null;
 }

@@ -79,7 +79,124 @@ export const SCIENCE_PASSAGES: Passage[] = [
   },
 ];
 
+export const PHYSICS_PASSAGE: Passage = {
+  id: 'sci.p.pendulum',
+  section: 'science',
+  kind: 'science_research',
+  title: 'What Sets a Pendulum’s Swing',
+  wordCount: 130,
+  attribution: 'Original practice content — ACT Pulse',
+  paragraphs: [
+    {
+      id: 'p1',
+      text: 'Students investigated what determines a pendulum’s period (the time for one full swing). In Experiment 1 they varied the string length while keeping a 50 g bob and a 10° release angle. In Experiment 2 they varied the bob’s mass while keeping a 100 cm string and the same release angle. Each period is the average of 10 trials, shown in Table 3.',
+    },
+  ],
+  stimulus: {
+    kind: 'table',
+    title: 'Table 3 — Average period (s)',
+    columns: ['Experiment', 'Condition', 'Period (s)'],
+    rows: [
+      ['1', '25 cm string', 1.0],
+      ['1', '50 cm string', 1.4],
+      ['1', '100 cm string', 2.0],
+      ['1', '200 cm string', 2.8],
+      ['2', '50 g bob', 2.0],
+      ['2', '100 g bob', 2.0],
+      ['2', '200 g bob', 2.0],
+    ],
+    caption: 'Release angle held at 10° for all trials.',
+  },
+};
+
+SCIENCE_PASSAGES.push(PHYSICS_PASSAGE);
+
 export const SCIENCE_QUESTIONS: ACTQuestion[] = [
+  // Pendulum — research summary (physics)
+  authored({
+    id: 'sci.q.pend.design',
+    section: 'science',
+    microSkill: 'sci.inv.design',
+    difficulty: 2,
+    expectedSeconds: 45,
+    format: 'science_set',
+    passageId: 'sci.p.pendulum',
+    prompt:
+      'Why did the students keep the release angle at 10° in both experiments?',
+    correct: 'To make sure any change in period came only from the variable being tested.',
+    choices: [
+      'To make the pendulum swing faster.',
+      'To make sure any change in period came only from the variable being tested.',
+      'Because larger angles are impossible to measure.',
+      'To reduce the mass of the bob.',
+    ],
+    explanation:
+      'Holding the angle constant controls it as a variable, so differences in period can be attributed to string length (Exp. 1) or mass (Exp. 2) alone.',
+    distractors: {
+      'To make the pendulum swing faster.': 'A fixed angle is about control, not speed.',
+      'Because larger angles are impossible to measure.': 'Larger angles can be measured; they were simply held constant.',
+      'To reduce the mass of the bob.': 'Angle and mass are independent quantities.',
+    },
+    conceptSummary:
+      'Controlled variables are held constant so only the independent variable can cause the effect.',
+    tags: ['science', 'design', 'controls', 'physics'],
+  }),
+  authored({
+    id: 'sci.q.pend.trend',
+    section: 'science',
+    microSkill: 'sci.data.trend',
+    difficulty: 3,
+    expectedSeconds: 45,
+    format: 'science_set',
+    passageId: 'sci.p.pendulum',
+    prompt: 'Based on Table 3, the period of the pendulum depends on:',
+    correct: 'string length but not bob mass.',
+    choices: [
+      'string length but not bob mass.',
+      'bob mass but not string length.',
+      'both string length and bob mass.',
+      'neither string length nor bob mass.',
+    ],
+    explanation:
+      'In Experiment 1 the period rises with string length (1.0 → 2.8 s), while in Experiment 2 the period stays 2.0 s across all masses.',
+    distractors: {
+      'bob mass but not string length.': 'The mass rows are identical (2.0 s); the length rows change.',
+      'both string length and bob mass.': 'Mass shows no effect — all three masses give 2.0 s.',
+      'neither string length nor bob mass.': 'Length clearly changes the period.',
+    },
+    conceptSummary:
+      'Compare each experiment separately: a variable matters only if the outcome changes with it.',
+    strategyTip: 'Scan for the column that changes while the result stays flat — that variable doesn’t matter.',
+    tags: ['science', 'trend', 'physics'],
+  }),
+  authored({
+    id: 'sci.q.pend.predict',
+    section: 'science',
+    microSkill: 'sci.inv.predict',
+    difficulty: 3,
+    expectedSeconds: 50,
+    format: 'science_set',
+    passageId: 'sci.p.pendulum',
+    prompt:
+      'If the students tested a 150 cm string with a 50 g bob at 10°, the period would most likely be:',
+    correct: 'between 2.0 and 2.8 seconds.',
+    choices: [
+      'between 2.0 and 2.8 seconds.',
+      'less than 1.0 second.',
+      'exactly 2.0 seconds.',
+      'greater than 2.8 seconds.',
+    ],
+    explanation:
+      '150 cm falls between the 100 cm (2.0 s) and 200 cm (2.8 s) trials, so its period should fall between those values.',
+    distractors: {
+      'less than 1.0 second.': 'That would suit a string shorter than 25 cm.',
+      'exactly 2.0 seconds.': '2.0 s belongs to the 100 cm string; 150 cm should be longer.',
+      'greater than 2.8 seconds.': 'That would require a string longer than 200 cm.',
+    },
+    conceptSummary: 'Interpolate: a value between two tested conditions gives a result between their outcomes.',
+    tags: ['science', 'interpolation', 'prediction', 'physics'],
+  }),
+
   // Solubility — data representation
   authored({
     id: 'sci.q.sol.read',

@@ -541,6 +541,254 @@ export const ENGLISH_QUESTIONS: ACTQuestion[] = [
     tags: ['transition', 'addition'],
   }),
 
+  // ── Round 2: coverage for previously content-less skills ──────────────
+  authored({
+    id: 'eng.a.comma.coordinate.1',
+    section: 'english',
+    microSkill: 'eng.comma.coordinate',
+    difficulty: 3,
+    expectedSeconds: 40,
+    prompt:
+      'Choose the best version:\n\n“The hikers followed a ___ trail to the summit.”',
+    correct: 'steep, rocky',
+    choices: ['steep, rocky', 'steep rocky', 'steep, rocky,', 'steep and, rocky'],
+    explanation:
+      '“Steep” and “rocky” are coordinate adjectives — you could say “steep and rocky” or “rocky, steep” — so a comma separates them. No comma follows the last adjective before the noun.',
+    distractors: {
+      'steep rocky': 'Coordinate adjectives (test: could you insert “and”?) need a comma between them.',
+      'steep, rocky,': 'Never put a comma between the final adjective and its noun.',
+      'steep and, rocky': 'A comma never follows “and” between two adjectives.',
+    },
+    conceptSummary:
+      'Separate coordinate adjectives with a comma; skip the comma if “and” wouldn’t sound natural between them.',
+    strategyTip: 'Try the “and” test or reverse the adjectives — if it still works, use a comma.',
+    tags: ['comma', 'coordinate-adjectives'],
+  }),
+
+  authored({
+    id: 'eng.a.comma.compound.1',
+    section: 'english',
+    microSkill: 'eng.comma.compound',
+    difficulty: 2,
+    expectedSeconds: 35,
+    prompt:
+      'Choose the best version:\n\n“The storm knocked out the power ___ the family lit candles.”',
+    correct: 'power, so the family',
+    choices: ['power, so the family', 'power so the family', 'power, the family', 'power; so the family'],
+    explanation:
+      'Two independent clauses joined by the coordinating conjunction “so” need a comma before the conjunction.',
+    distractors: {
+      'power so the family': 'A comma is required before a FANBOYS conjunction joining two independent clauses.',
+      'power, the family': 'Dropping the conjunction leaves a comma splice.',
+      'power; so the family': 'Use either a semicolon alone or a comma + conjunction — not a semicolon + conjunction here.',
+    },
+    conceptSummary:
+      'Independent clause + comma + FANBOYS (for, and, nor, but, or, yet, so) + independent clause.',
+    tags: ['comma', 'fanboys', 'compound'],
+  }),
+
+  authored({
+    id: 'eng.a.dash.1',
+    section: 'english',
+    microSkill: 'eng.punct.dash',
+    difficulty: 3,
+    expectedSeconds: 40,
+    prompt:
+      'Choose the best version:\n\n“The recipe requires one unusual ingredient ___ saffron ___ that can be hard to find.”',
+    correct: '— saffron —',
+    choices: ['— saffron —', '— saffron,', ', saffron —', '; saffron;'],
+    explanation:
+      'An interrupting element can be set off by a PAIR of dashes. The punctuation must match on both sides — a dash to open requires a dash to close.',
+    distractors: {
+      '— saffron,': 'Mixing a dash with a comma breaks the pair; the marks must match.',
+      ', saffron —': 'Same problem in reverse — open and close with the same mark.',
+      '; saffron;': 'Semicolons join independent clauses; they cannot frame an appositive.',
+    },
+    conceptSummary:
+      'Set off interrupters with a matched pair: two commas, two dashes, or two parentheses — never a mix.',
+    strategyTip: 'Find the opening mark; the closing mark must be its twin.',
+    tags: ['dash', 'punctuation', 'pairs'],
+  }),
+
+  authored({
+    id: 'eng.a.quotation.1',
+    section: 'english',
+    microSkill: 'eng.punct.quotation',
+    difficulty: 3,
+    expectedSeconds: 40,
+    prompt:
+      'Choose the best version:\n\n“The coach said ___ every practice counts.”',
+    correct: ', “Remember,',
+    choices: [', “Remember,', ' “Remember,', ', “Remember', ': “Remember —'],
+    explanation:
+      'A comma introduces the quotation after “said,” and the interrupter “Remember,” keeps its own comma inside the quotation: The coach said, “Remember, every practice counts.”',
+    distractors: {
+      ' “Remember,': 'A comma is needed after the speech verb “said” to introduce a direct quotation.',
+      ', “Remember': 'The word “Remember” addresses the listeners and needs its own comma inside the quote.',
+      ': “Remember —': 'A colon can introduce a quote after a full clause, but “The coach said” is not a complete setup, and the dash is unneeded.',
+    },
+    conceptSummary:
+      'Use a comma after a speech verb (said, asked) to introduce a direct quotation; punctuation inside the quote follows normal rules.',
+    tags: ['quotation', 'punctuation'],
+  }),
+
+  authored({
+    id: 'eng.a.fragment.1',
+    section: 'english',
+    microSkill: 'eng.struct.fragment',
+    difficulty: 3,
+    expectedSeconds: 40,
+    prompt:
+      'Which option makes the underlined portion a complete sentence?\n\n“Because the museum stayed open late. Visitors lingered in the new wing.”',
+    correct: 'Because the museum stayed open late, visitors lingered in the new wing.',
+    choices: [
+      'Because the museum stayed open late. Visitors lingered in the new wing.',
+      'Because the museum stayed open late, visitors lingered in the new wing.',
+      'Because the museum stayed open late; visitors lingered in the new wing.',
+      'The museum stayed open late. Because visitors lingered in the new wing.',
+    ],
+    explanation:
+      '“Because the museum stayed open late” is a dependent clause and cannot stand alone. Joining it to the main clause with a comma fixes the fragment.',
+    distractors: {
+      'Because the museum stayed open late. Visitors lingered in the new wing.':
+        'The first “sentence” is a fragment — a dependent clause with no main clause.',
+      'Because the museum stayed open late; visitors lingered in the new wing.':
+        'A semicolon requires an independent clause on BOTH sides; the first part is dependent.',
+      'The museum stayed open late. Because visitors lingered in the new wing.':
+        'This just moves the fragment to the second sentence.',
+    },
+    conceptSummary:
+      'A clause starting with a subordinator (because, although, when…) must attach to an independent clause.',
+    strategyTip: 'If a “sentence” starts with because/although/while, make sure a main clause follows.',
+    tags: ['fragment', 'sentence-structure'],
+  }),
+
+  authored({
+    id: 'eng.a.runon.1',
+    section: 'english',
+    microSkill: 'eng.struct.runon',
+    difficulty: 3,
+    expectedSeconds: 40,
+    prompt:
+      'Choose the best version:\n\n“The tide came in quickly the children grabbed their sandcastle buckets.”',
+    correct: 'came in quickly, and the children',
+    choices: [
+      'came in quickly the children',
+      'came in quickly, and the children',
+      'came in quickly, the children',
+      'came in quickly and, the children',
+    ],
+    explanation:
+      'Two independent clauses are fused together. A comma plus “and” joins them correctly.',
+    distractors: {
+      'came in quickly the children': 'This is the original fused sentence — two clauses with no join at all.',
+      'came in quickly, the children': 'A comma alone creates a comma splice.',
+      'came in quickly and, the children': 'The comma belongs BEFORE the conjunction, not after it.',
+    },
+    conceptSummary:
+      'Fix fused sentences with a period, a semicolon, or comma + coordinating conjunction.',
+    tags: ['run-on', 'fused'],
+  }),
+
+  authored({
+    id: 'eng.a.verbtense.1',
+    section: 'english',
+    microSkill: 'eng.usage.verbtense',
+    difficulty: 3,
+    expectedSeconds: 40,
+    prompt:
+      'Choose the best version:\n\n“By the time the judges announced the winner, the bakers ___ for nine hours.”',
+    correct: 'had been working',
+    choices: ['had been working', 'are working', 'will work', 'work'],
+    explanation:
+      'The sentence describes an action that continued up to a point in the past (“by the time the judges announced”), which calls for the past perfect progressive: “had been working.”',
+    distractors: {
+      'are working': 'Present tense clashes with the past-tense time frame set by “announced.”',
+      'will work': 'Future tense contradicts an event that already happened.',
+      work: 'Simple present cannot describe a duration completed before a past moment.',
+    },
+    conceptSummary:
+      'Match verb tense to the sentence’s time markers; “by the time + past” pairs with the past perfect.',
+    strategyTip: 'Find the time anchor (announced) and choose the tense that fits before/after it.',
+    tags: ['verb-tense', 'usage'],
+  }),
+
+  authored({
+    id: 'eng.a.precision.1',
+    section: 'english',
+    microSkill: 'eng.kol.precision',
+    difficulty: 3,
+    expectedSeconds: 35,
+    prompt:
+      'Choose the most precise word:\n\n“The engineer ___ the bridge’s cables weekly for signs of wear.”',
+    correct: 'inspects',
+    choices: ['inspects', 'looks at', 'considers', 'handles'],
+    explanation:
+      '“Inspects” precisely names a careful, systematic examination — exactly what an engineer does to cables. The other options are vaguer or wrong in meaning.',
+    distractors: {
+      'looks at': 'Too casual and vague for a technical safety check.',
+      considers: '“Considers” means thinks about, not physically examines.',
+      handles: '“Handles” means touches or manages, not examines for wear.',
+    },
+    conceptSummary: 'Prefer the word whose meaning most exactly fits the context.',
+    tags: ['precision', 'word-choice'],
+  }),
+
+  authored({
+    id: 'eng.a.relevance.1',
+    section: 'english',
+    microSkill: 'eng.prod.relevance',
+    difficulty: 3,
+    expectedSeconds: 45,
+    prompt:
+      'A paragraph explains how a town restored its historic clock tower. Which sentence, if added, is most relevant to the paragraph?',
+    correct: 'Craftspeople rebuilt the clock’s original brass mechanism by hand.',
+    choices: [
+      'The town also has a popular farmers market on Saturdays.',
+      'Craftspeople rebuilt the clock’s original brass mechanism by hand.',
+      'Many cities have clock towers of various heights.',
+      'The mayor enjoys jogging past the tower in the mornings.',
+    ],
+    explanation:
+      'Only the brass-mechanism sentence adds a detail about the restoration itself — the paragraph’s actual topic.',
+    distractors: {
+      'The town also has a popular farmers market on Saturdays.': 'The market has nothing to do with the restoration.',
+      'Many cities have clock towers of various heights.': 'A generic fact that adds nothing about THIS restoration.',
+      'The mayor enjoys jogging past the tower in the mornings.': 'A personal detail unrelated to the restoration work.',
+    },
+    conceptSummary:
+      'A relevant addition develops the paragraph’s specific topic, not just its general subject.',
+    tags: ['relevance', 'topic-development'],
+  }),
+
+  authored({
+    id: 'eng.a.introconc.1',
+    section: 'english',
+    microSkill: 'eng.prod.introconc',
+    difficulty: 4,
+    expectedSeconds: 50,
+    prompt:
+      'An essay describes how community libraries reinvented themselves as technology hubs. Which sentence is the most effective introduction?',
+    correct:
+      'Walk into a library today and you may hear 3D printers humming where card catalogs once stood.',
+    choices: [
+      'Libraries are buildings that contain books and other materials.',
+      'Walk into a library today and you may hear 3D printers humming where card catalogs once stood.',
+      'This essay will discuss libraries and technology.',
+      'Technology is important in the modern world.',
+    ],
+    explanation:
+      'The best introduction previews the essay’s specific angle — libraries transformed by technology — with a vivid, concrete image.',
+    distractors: {
+      'Libraries are buildings that contain books and other materials.': 'A flat definition that previews nothing about the essay’s angle.',
+      'This essay will discuss libraries and technology.': 'Announcing the topic (“this essay will…”) is weak ACT style.',
+      'Technology is important in the modern world.': 'Too broad — it could open almost any essay.',
+    },
+    conceptSummary:
+      'Strong introductions are specific to the essay’s actual focus and engage without empty announcements.',
+    tags: ['introduction', 'organization'],
+  }),
+
   authored({
     id: 'eng.a.order.1',
     section: 'english',

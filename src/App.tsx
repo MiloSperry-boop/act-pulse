@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import { useAppStore } from './state/appStore';
 import { Layout } from './components/Layout';
+import { AutoUpdater } from './components/UpdateBanner';
 import { HomeScreen } from './screens/HomeScreen';
 import { TrainScreen } from './screens/TrainScreen';
 
@@ -84,6 +85,7 @@ export function App() {
     <HashRouter
       future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
     >
+      <AutoUpdater />
       <Gate>
         <Suspense fallback={<Loading />}>
           <Routes>

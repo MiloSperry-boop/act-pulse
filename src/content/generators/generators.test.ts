@@ -42,6 +42,19 @@ describe('procedural generators', () => {
     expect(correct).toBeDefined();
   });
 
+  it('SVA correct answers are always verbs compatible with the predicate', () => {
+    // Regression: action/auxiliary verbs like "has"/"runs" once produced
+    // ungrammatical sentences ("the series of files has stored in the attic").
+    const allowed = new Set(['is', 'are', 'was', 'were', 'seems', 'seem']);
+    for (let i = 0; i < 60; i++) {
+      const q = generateSvaQuestion(`compat:${i}`);
+      const correct = q.choices.find((c) => c.id === q.correctChoiceId)!;
+      expect(allowed.has(correct.text), `"${correct.text}" in ${q.prompt}`).toBe(
+        true,
+      );
+    }
+  });
+
   it('math core generator produces valid questions with real distractors', () => {
     const batch = generateMathCoreBatch('test-math', 40);
     for (const q of batch) {

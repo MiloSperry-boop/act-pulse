@@ -12,14 +12,14 @@ import { generateMatrixBatch } from './generators/matrix';
 import { generateSvaBatch } from './generators/subjectVerb';
 import { generateMathCoreBatch } from './generators/mathCore';
 
-export const QUESTION_BANK_VERSION = '2026.07.16-1';
+export const QUESTION_BANK_VERSION = '2026.07.16-2';
 
 /** Deterministic generated content (fixed seeds → same bank every load). */
 function buildGenerated(): ACTQuestion[] {
   return [
-    ...generateMatrixBatch('matrix-seed', 20),
-    ...generateSvaBatch('sva-seed', 20),
-    ...generateMathCoreBatch('mathcore-seed', 25),
+    ...generateMatrixBatch('matrix-seed', 30),
+    ...generateSvaBatch('sva-seed', 30),
+    ...generateMathCoreBatch('mathcore-seed', 45),
   ];
 }
 

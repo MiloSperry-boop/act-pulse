@@ -14,20 +14,29 @@ interface VerbSet {
   distract: [string, string]; // two non-finite / wrong-tense forms
 }
 
-const VERBS: VerbSet[] = [
+// Verb sets are grouped by what predicate they can grammatically precede.
+// BE works before adjectives, participles, and "There ___" constructions;
+// SEEM works before adjectives only. (Action verbs like "runs" would produce
+// ungrammatical sentences with these templates, so they are not used.)
+const BE_VERBS: VerbSet[] = [
   { singular: 'is', plural: 'are', distract: ['being', 'be'] },
   { singular: 'was', plural: 'were', distract: ['been', 'being'] },
-  { singular: 'has', plural: 'have', distract: ['having', 'had'] },
-  { singular: 'runs', plural: 'run', distract: ['running', 'to run'] },
-  { singular: 'writes', plural: 'write', distract: ['writing', 'to write'] },
+];
+const SEEM_VERBS: VerbSet[] = [
   { singular: 'seems', plural: 'seem', distract: ['seeming', 'to seem'] },
 ];
+/** Adjective predicates ("… careful about the details") take BE or SEEM. */
+const LINKING = [...BE_VERBS, ...SEEM_VERBS];
+/** Participle / existential predicates ("… stored in the attic") take BE only. */
+const BE_ONLY = BE_VERBS;
 
 interface Template {
   level: number;
   difficulty: Difficulty;
   micro: string;
   subskillNote: string;
+  /** Verb sets grammatically compatible with this template's predicate. */
+  verbs: VerbSet[];
   /** returns { sentenceBefore, sentenceAfter, subjectIsSingular, trapNote } */
   build: (rng: RNG) => {
     before: string;
@@ -46,6 +55,7 @@ const SINGULAR_OBJECTS = ['garden', 'library', 'museum', 'laboratory', 'office']
 const TEMPLATES: Template[] = [
   {
     level: 1,
+    verbs: LINKING,
     difficulty: 1,
     micro: 'eng.usage.sva.basic',
     subskillNote: 'Simple subject',
@@ -64,6 +74,7 @@ const TEMPLATES: Template[] = [
   },
   {
     level: 2,
+    verbs: BE_ONLY,
     difficulty: 2,
     micro: 'eng.usage.sva.intervening',
     subskillNote: 'Intervening prepositional phrase',
@@ -93,6 +104,7 @@ const TEMPLATES: Template[] = [
   },
   {
     level: 3,
+    verbs: LINKING,
     difficulty: 3,
     micro: 'eng.usage.sva.intervening',
     subskillNote: 'Relative clause between subject and verb',
@@ -111,6 +123,7 @@ const TEMPLATES: Template[] = [
   },
   {
     level: 4,
+    verbs: BE_ONLY,
     difficulty: 3,
     micro: 'eng.usage.sva.compound',
     subskillNote: 'Compound subject joined by "and"',
@@ -128,6 +141,7 @@ const TEMPLATES: Template[] = [
   },
   {
     level: 5,
+    verbs: LINKING,
     difficulty: 4,
     micro: 'eng.usage.sva.compound',
     subskillNote: 'Neither/nor — agree with the nearer subject',
@@ -147,6 +161,7 @@ const TEMPLATES: Template[] = [
   },
   {
     level: 6,
+    verbs: LINKING,
     difficulty: 4,
     micro: 'eng.usage.sva.indefinite',
     subskillNote: 'Indefinite pronoun subject',
@@ -164,6 +179,7 @@ const TEMPLATES: Template[] = [
   },
   {
     level: 7,
+    verbs: BE_ONLY,
     difficulty: 4,
     micro: 'eng.usage.sva.inverted',
     subskillNote: 'Inverted order (there is/are)',
@@ -187,7 +203,7 @@ export function generateSvaQuestion(seedStr: string): ACTQuestion {
   const rng = mulberry32(hashSeed(seedStr));
   const tmpl = TEMPLATES[randInt(rng, 0, TEMPLATES.length - 1)];
   const parts = tmpl.build(rng);
-  const verb = pick(rng, VERBS);
+  const verb = pick(rng, tmpl.verbs);
   const correct = parts.singular ? verb.singular : verb.plural;
   const wrongNumber = parts.singular ? verb.plural : verb.singular;
 

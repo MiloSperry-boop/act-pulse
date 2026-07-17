@@ -7,6 +7,7 @@ import { authored } from '../authored/authoredHelper';
  */
 
 export const READING_PASSAGES: Passage[] = [
+  // (HUMANITIES_PASSAGE is appended below, after its definition.)
   {
     id: 'read.p.lighthouse',
     section: 'reading',
@@ -99,7 +100,151 @@ export const READING_PASSAGES: Passage[] = [
   },
 ];
 
+export const HUMANITIES_PASSAGE: Passage = {
+  id: 'read.p.jazz',
+  section: 'reading',
+  kind: 'humanities',
+  title: 'The Quiet Revolution of the Jazz Trio',
+  wordCount: 235,
+  attribution: 'Original practice content — ACT Pulse',
+  paragraphs: [
+    {
+      id: 'p1',
+      functionLabel: 'Introduces the conventional view',
+      text: 'For decades, the piano trio was jazz’s reliable furniture: piano out front, bass and drums politely keeping time behind it. Audiences knew the arrangement, and so did the musicians — the pianist proposed, the rhythm section seconded. Few thought the format had anything left to say.',
+    },
+    {
+      id: 'p2',
+      functionLabel: 'Presents the innovation',
+      text: 'Then, in the late 1950s, a handful of trios began treating the three instruments as equal voices in a conversation. The bassist might interrupt with a countermelody; the drummer might answer a phrase rather than merely mark its beat. What had been an accompaniment became an argument — friendly, but genuinely three-sided.',
+    },
+    {
+      id: 'p3',
+      functionLabel: 'Acknowledges resistance',
+      text: 'Critics of the new approach heard clutter where its admirers heard freedom. If everyone speaks, they asked, who is left to listen? Some bandleaders quietly returned to the older hierarchy, finding that democracy on the bandstand demanded more rehearsal, more trust, and more restraint than it first appeared.',
+    },
+    {
+      id: 'p4',
+      functionLabel: 'Assesses the lasting influence',
+      text: 'Yet the conversational trio endured, and its lesson traveled well beyond jazz. Chamber ensembles, rock rhythm sections, even film composers came to borrow its central discovery: that equality among voices is not the absence of structure but a more demanding form of it.',
+    },
+  ],
+};
+
+READING_PASSAGES.push(HUMANITIES_PASSAGE);
+
 export const READING_QUESTIONS: ACTQuestion[] = [
+  // Jazz (humanities)
+  authored({
+    id: 'read.q.jazz.main',
+    section: 'reading',
+    microSkill: 'read.key.mainidea',
+    difficulty: 3,
+    expectedSeconds: 55,
+    format: 'passage_reading',
+    passageId: 'read.p.jazz',
+    prompt: 'The passage as a whole is best described as:',
+    correct:
+      'an account of how a musical format was reinvented and why that reinvention mattered.',
+    choices: [
+      'a biography of a famous jazz pianist.',
+      'an account of how a musical format was reinvented and why that reinvention mattered.',
+      'an argument that older jazz styles were superior.',
+      'a technical guide to playing bass and drums.',
+    ],
+    explanation:
+      'The passage traces the trio from its conventional form, through the conversational innovation and its critics, to its lasting influence — a story of reinvention and consequence.',
+    distractors: {
+      'a biography of a famous jazz pianist.': 'No individual musician is profiled.',
+      'an argument that older jazz styles were superior.': 'The passage presents critics’ doubts but ultimately emphasizes the innovation’s endurance.',
+      'a technical guide to playing bass and drums.': 'There are no playing instructions.',
+    },
+    conceptSummary: 'Identify the overall project of the passage, not one paragraph’s claim.',
+    tags: ['reading', 'main-idea', 'humanities'],
+  }),
+  authored({
+    id: 'read.q.jazz.context',
+    section: 'reading',
+    microSkill: 'read.craft.context',
+    difficulty: 3,
+    expectedSeconds: 50,
+    format: 'passage_reading',
+    passageId: 'read.p.jazz',
+    prompt:
+      'As used in the first paragraph, the phrase “reliable furniture” most nearly suggests that the piano trio was:',
+    correct: 'familiar and taken for granted.',
+    choices: [
+      'familiar and taken for granted.',
+      'physically sturdy on stage.',
+      'expensive to maintain.',
+      'newly fashionable.',
+    ],
+    explanation:
+      'Calling the format “furniture” — with audiences knowing “the arrangement” — figures it as something comfortable and unquestioned, part of the room rather than a surprise.',
+    distractors: {
+      'physically sturdy on stage.': 'The phrase is figurative, not about actual objects.',
+      'expensive to maintain.': 'Cost is never at issue.',
+      'newly fashionable.': 'The point is the opposite — the format felt settled, not new.',
+    },
+    conceptSummary: 'Meaning-in-context questions test the figurative use, not the literal word.',
+    strategyTip: 'Replace the phrase with each choice and re-read the sentence.',
+    tags: ['reading', 'context', 'figurative'],
+  }),
+  authored({
+    id: 'read.q.jazz.function',
+    section: 'reading',
+    microSkill: 'read.craft.structure',
+    difficulty: 4,
+    expectedSeconds: 55,
+    format: 'passage_reading',
+    passageId: 'read.p.jazz',
+    prompt: 'The third paragraph primarily functions to:',
+    correct: 'present objections to the innovation and the demands it placed on musicians.',
+    choices: [
+      'present objections to the innovation and the demands it placed on musicians.',
+      'introduce the conversational trio for the first time.',
+      'list the instruments in a standard trio.',
+      'describe the format’s influence on film composers.',
+    ],
+    explanation:
+      'Paragraph three voices the critics (“who is left to listen?”) and notes that some bandleaders retreated — acknowledging resistance and difficulty.',
+    distractors: {
+      'introduce the conversational trio for the first time.': 'That happens in paragraph two.',
+      'list the instruments in a standard trio.': 'That is paragraph one’s territory.',
+      'describe the format’s influence on film composers.': 'Influence arrives in the final paragraph.',
+    },
+    conceptSummary: 'Paragraph-function questions ask what a paragraph DOES within the whole.',
+    tags: ['reading', 'paragraph-function', 'structure'],
+  }),
+  authored({
+    id: 'read.q.jazz.inference',
+    section: 'reading',
+    microSkill: 'read.key.inference',
+    difficulty: 4,
+    expectedSeconds: 55,
+    format: 'passage_reading',
+    passageId: 'read.p.jazz',
+    prompt:
+      'It can most reasonably be inferred that the author regards “democracy on the bandstand” as:',
+    correct: 'demanding, but ultimately durable and influential.',
+    choices: [
+      'demanding, but ultimately durable and influential.',
+      'a failure that most musicians abandoned.',
+      'easier to achieve than the older hierarchy.',
+      'relevant only to jazz musicians.',
+    ],
+    explanation:
+      'The passage concedes the approach required “more rehearsal, more trust, and more restraint,” yet emphasizes that it “endured” and that its lesson “traveled well beyond jazz.”',
+    distractors: {
+      'a failure that most musicians abandoned.': 'Only “some bandleaders” retreated; the format endured.',
+      'easier to achieve than the older hierarchy.': 'The text says it demanded MORE, not less.',
+      'relevant only to jazz musicians.': 'The final paragraph explicitly extends its influence beyond jazz.',
+    },
+    conceptSummary:
+      'Infer the author’s stance from evaluative language across the whole passage.',
+    tags: ['reading', 'inference', 'author-view'],
+  }),
+
   // Lighthouse
   authored({
     id: 'read.q.lighthouse.main',

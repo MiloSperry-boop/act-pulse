@@ -1,13 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import { BottomNav } from './BottomNav';
-import { UpdateBanner } from './UpdateBanner';
 import './BottomNav.css';
 import './layout.css';
 
 export function Layout() {
   return (
     <div className="app-shell">
-      <UpdateBanner />
       <main className="screen">
         <Outlet />
       </main>

@@ -41,6 +41,7 @@ export const SKILLS: Skill[] = [
   s('eng.punct.colon', 'english', 'eng.conventions', 'Punctuation', 'Colons', 1),
   s('eng.punct.apostrophe', 'english', 'eng.conventions', 'Punctuation', 'Apostrophes & possessives', 1),
   s('eng.punct.dash', 'english', 'eng.conventions', 'Punctuation', 'Dashes', 1),
+  s('eng.punct.quotation', 'english', 'eng.conventions', 'Punctuation', 'Quotation punctuation', 1),
 
   // ─── ENGLISH · Conventions · Sentence Structure ───────────────────────
   s('eng.struct.fragment', 'english', 'eng.conventions', 'Sentence Structure', 'Fragments', 1),
@@ -79,6 +80,7 @@ export const SKILLS: Skill[] = [
   s('math.nq.matrix.multiply', 'math', 'math.higher', 'Number & Quantity', 'Matrices — multiplication & validity', 2),
   s('math.nq.exponents', 'math', 'math.higher', 'Number & Quantity', 'Exponents & radicals', 0),
   s('math.nq.complex', 'math', 'math.higher', 'Number & Quantity', 'Complex numbers', 0),
+  s('math.nq.vectors', 'math', 'math.higher', 'Number & Quantity', 'Vectors', 0),
 
   // ─── MATH · Algebra ───────────────────────────────────────────────────
   s('math.alg.linear', 'math', 'math.higher', 'Algebra', 'Linear equations & inequalities', 0),

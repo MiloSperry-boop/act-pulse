@@ -237,6 +237,216 @@ export const MATH_QUESTIONS: ACTQuestion[] = [
     tags: ['circles', 'coordinate-geometry', 'multistep'],
   }),
 
+  // ── Round 2: coverage for previously content-less skills ──────────────
+  authored({
+    id: 'math.a.complex.1',
+    section: 'math',
+    microSkill: 'math.nq.complex',
+    difficulty: 3,
+    expectedSeconds: 60,
+    prompt: 'For i² = −1, what is the product (3 + 2i)(1 − i)?',
+    correct: '5 − i',
+    choices: ['5 − i', '3 − 2i', '5 + i', '1 − i'],
+    explanation:
+      'FOIL: 3·1 + 3(−i) + 2i·1 + 2i(−i) = 3 − 3i + 2i − 2i² = 3 − i + 2 = 5 − i.',
+    distractors: {
+      '3 − 2i': 'This misses the −2i² term, which becomes +2 and changes the real part.',
+      '5 + i': 'Sign slip on the imaginary part: −3i + 2i = −i, not +i.',
+      '1 − i': 'This is the second factor, not the product.',
+    },
+    conceptSummary: 'Multiply complex numbers with FOIL, then replace i² with −1.',
+    strategyTip: 'The i² term always folds back into the real part — with a sign flip.',
+    tags: ['complex-numbers'],
+  }),
+
+  authored({
+    id: 'math.a.vectors.1',
+    section: 'math',
+    microSkill: 'math.nq.vectors',
+    difficulty: 3,
+    expectedSeconds: 55,
+    prompt:
+      'Vectors u = ⟨3, −2⟩ and v = ⟨−1, 4⟩. What is 2u + v?',
+    correct: '⟨5, 0⟩',
+    choices: ['⟨5, 0⟩', '⟨2, 2⟩', '⟨4, −6⟩', '⟨5, 8⟩'],
+    explanation:
+      '2u = ⟨6, −4⟩. Adding v: ⟨6 + (−1), −4 + 4⟩ = ⟨5, 0⟩.',
+    distractors: {
+      '⟨2, 2⟩': 'This is u + v without doubling u first.',
+      '⟨4, −6⟩': 'This subtracted v instead of adding it.',
+      '⟨5, 8⟩': 'Sign error on the second component: −4 + 4 = 0, not 8.',
+    },
+    conceptSummary:
+      'Scale a vector by multiplying each component; add vectors component by component.',
+    tags: ['vectors'],
+  }),
+
+  authored({
+    id: 'math.a.similar.1',
+    section: 'math',
+    microSkill: 'math.geo.triangles',
+    difficulty: 3,
+    expectedSeconds: 65,
+    prompt:
+      'Two similar triangles have corresponding sides of 6 cm and 9 cm. If the smaller triangle’s area is 20 cm², what is the larger triangle’s area?',
+    correct: '45 cm²',
+    choices: ['45 cm²', '30 cm²', '60 cm²', '40 cm²'],
+    explanation:
+      'The side ratio is 9/6 = 3/2, so areas scale by (3/2)² = 9/4. Area = 20 × 9/4 = 45 cm².',
+    distractors: {
+      '30 cm²': 'This scales the area by the side ratio (3/2) instead of its square.',
+      '60 cm²': 'This scales by 3 — the ratio of one triangle’s sides to itself, not the pair.',
+      '40 cm²': 'Doubling is not the correct scale factor here.',
+    },
+    conceptSummary:
+      'For similar figures, areas scale by the SQUARE of the ratio of corresponding sides.',
+    strategyTip: 'Length ratio k → area ratio k² → volume ratio k³.',
+    tags: ['similarity', 'geometry', 'area'],
+  }),
+
+  authored({
+    id: 'math.a.volume.1',
+    section: 'math',
+    microSkill: 'math.geo.volume',
+    difficulty: 4,
+    expectedSeconds: 75,
+    prompt:
+      'A cylindrical water tank has radius 3 ft and height 10 ft. Approximately how many cubic feet of water does it hold when 80% full? (Use π ≈ 3.14.)',
+    correct: '226 ft³',
+    choices: ['226 ft³', '283 ft³', '188 ft³', '75 ft³'],
+    explanation:
+      'V = πr²h = 3.14 × 9 × 10 ≈ 282.6 ft³. At 80%: 282.6 × 0.8 ≈ 226 ft³.',
+    distractors: {
+      '283 ft³': 'That is the FULL tank — the question asks for 80% of it.',
+      '188 ft³': 'This looks like 2/3 of the volume; the tank is 80% full.',
+      '75 ft³': 'This used circumference or dropped the r² — recheck V = πr²h.',
+    },
+    conceptSummary: 'Cylinder volume V = πr²h; then apply the fraction that is filled.',
+    strategyTip: 'Two steps: full volume first, percentage second.',
+    tags: ['volume', 'cylinder', 'multistep'],
+  }),
+
+  authored({
+    id: 'math.a.expected.1',
+    section: 'math',
+    microSkill: 'math.stat.expected',
+    difficulty: 4,
+    expectedSeconds: 75,
+    prompt:
+      'A game pays $10 with probability 0.2, $2 with probability 0.5, and $0 otherwise. What is the expected payout per play?',
+    correct: '$3.00',
+    choices: ['$3.00', '$4.00', '$2.40', '$6.00'],
+    explanation:
+      'E = 10(0.2) + 2(0.5) + 0(0.3) = 2 + 1 + 0 = $3.00.',
+    distractors: {
+      '$4.00': 'This averaged the two payouts (10 + 2)/3 — expected value weights by probability.',
+      '$2.40': 'Check the second term: 2 × 0.5 = 1, giving 3, not 2.4.',
+      '$6.00': 'This is (10 + 2)/2 — an unweighted average, not an expected value.',
+    },
+    conceptSummary:
+      'Expected value = Σ (outcome × probability), including zero-payout outcomes.',
+    tags: ['expected-value', 'probability'],
+  }),
+
+  authored({
+    id: 'math.a.bestfit.1',
+    section: 'math',
+    microSkill: 'math.stat.data',
+    difficulty: 3,
+    expectedSeconds: 60,
+    prompt:
+      'A line of best fit for a scatterplot of study hours (x) vs. quiz score (y) is y = 6x + 55. Which is the best interpretation of the slope?',
+    correct: 'Each additional hour of study is associated with about 6 more points.',
+    choices: [
+      'Each additional hour of study is associated with about 6 more points.',
+      'A student who studies zero hours scores exactly 6.',
+      'Every student improves by exactly 6 points per hour.',
+      'The maximum possible score is 55.',
+    ],
+    explanation:
+      'The slope (6) is the predicted change in y per one-unit change in x — about 6 points per extra hour, on average.',
+    distractors: {
+      'A student who studies zero hours scores exactly 6.': 'The zero-hours prediction is the intercept (55), not the slope.',
+      'Every student improves by exactly 6 points per hour.': 'A best-fit line describes an average trend, not a guarantee for every student.',
+      'The maximum possible score is 55.': 'The intercept is a starting prediction, not a maximum.',
+    },
+    conceptSummary:
+      'Slope = predicted change in y per unit of x; intercept = prediction when x = 0. Trends are averages, not guarantees.',
+    tags: ['scatterplot', 'best-fit', 'interpretation'],
+  }),
+
+  authored({
+    id: 'math.a.transform.1',
+    section: 'math',
+    microSkill: 'math.fn.graphs',
+    difficulty: 4,
+    expectedSeconds: 65,
+    prompt:
+      'The graph of y = f(x) is shifted 3 units right and 2 units down. Which equation describes the new graph?',
+    correct: 'y = f(x − 3) − 2',
+    choices: [
+      'y = f(x − 3) − 2',
+      'y = f(x + 3) − 2',
+      'y = f(x − 3) + 2',
+      'y = f(x − 2) − 3',
+    ],
+    explanation:
+      'A shift RIGHT by 3 replaces x with (x − 3) — the sign is opposite the direction — and a shift down subtracts 2 outside the function.',
+    distractors: {
+      'y = f(x + 3) − 2': '(x + 3) shifts LEFT, not right — horizontal shifts run opposite to their sign.',
+      'y = f(x − 3) + 2': '+2 outside shifts UP; the graph moves down.',
+      'y = f(x − 2) − 3': 'The 3 and 2 are swapped between the horizontal and vertical roles.',
+    },
+    conceptSummary:
+      'y = f(x − h) + k shifts right h and up k; horizontal shifts are opposite the sign inside.',
+    strategyTip: 'Inside the parentheses = horizontal and backwards; outside = vertical and as written.',
+    tags: ['transformations', 'graphs'],
+  }),
+
+  authored({
+    id: 'math.a.log.1',
+    section: 'math',
+    microSkill: 'math.fn.exponential',
+    difficulty: 4,
+    expectedSeconds: 60,
+    prompt: 'If log₂(x) = 5, what is the value of x?',
+    correct: '32',
+    choices: ['32', '25', '10', '64'],
+    explanation:
+      'log₂(x) = 5 means 2⁵ = x, so x = 32.',
+    distractors: {
+      '25': 'This squared 5 — the base is 2, so compute 2⁵, not 5².',
+      '10': 'This multiplied 2 × 5; a logarithm is an exponent, not a product.',
+      '64': 'That is 2⁶ — one power too many.',
+    },
+    conceptSummary: 'log_b(x) = y means bʸ = x — a logarithm IS an exponent.',
+    strategyTip: 'Rewrite every log equation in exponential form first.',
+    tags: ['logarithms'],
+  }),
+
+  authored({
+    id: 'math.a.rational.1',
+    section: 'math',
+    microSkill: 'math.alg.expressions',
+    difficulty: 4,
+    expectedSeconds: 70,
+    prompt:
+      'For x ≠ 3, which expression is equivalent to (x² − 9)/(x − 3)?',
+    correct: 'x + 3',
+    choices: ['x + 3', 'x − 3', 'x² − 3', 'x + 6'],
+    explanation:
+      'Factor the numerator as a difference of squares: x² − 9 = (x − 3)(x + 3). Cancel (x − 3) to get x + 3.',
+    distractors: {
+      'x − 3': 'The surviving factor after cancelling is (x + 3), not (x − 3).',
+      'x² − 3': 'You can’t subtract the denominator from the numerator — factor and cancel.',
+      'x + 6': 'Check the factoring: x² − 9 = (x − 3)(x + 3).',
+    },
+    conceptSummary:
+      'Simplify rational expressions by factoring, then cancelling common factors.',
+    strategyTip: 'a² − b² = (a − b)(a + b) appears constantly on the ACT.',
+    tags: ['rational-expressions', 'factoring'],
+  }),
+
   authored({
     id: 'math.a.probability.compound.1',
     section: 'math',
